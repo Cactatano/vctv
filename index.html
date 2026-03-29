@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VCtv — O jornal feito por você, pra VC.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #00C853;
+      --dgreen:  #007B33;
+      --navy:    #0F172A;
+      --slate:   #1E293B;
+      --muted:   #64748B;
+      --line:    #E2E8F0;
+      --card:    #F8FAFC;
+      --white:   #FFFFFF;
+      --red:     #DC2626;
+      --blue:    #3B82F6;
+      --amber:   #D97706;
+      --violet:  #7C3AED;
+      --teal:    #0D9488;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #F0F4F0;
+      color: var(--slate);
+      min-height: 100vh;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid var(--green);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg { width: 36px; height: 36px; }
+
+    .logo-text {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--white);
+      letter-spacing: -0.03em;
+    }
+
+    .logo-text span { color: var(--green); }
+
+    nav { display: flex; gap: 1.5rem; align-items: center; }
+
+    nav a {
+      color: #94A3B8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--white); }
+
+    .nav-badge {
+      background: var(--green);
+      color: var(--navy);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .nav-badge:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,200,83,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(0,200,83,0.15);
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(0,200,83,0.3);
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      color: #94A3B8;
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      line-height: 1.65;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-val {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .stat-sep {
+      width: 1px;
+      background: #1E293B;
+      align-self: stretch;
+    }
+
+    /* ── MAIN CONTAINER ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.75rem;
+    }
+
+    .section-label h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.03em;
+    }
+
+    .section-label .pill {
+      background: var(--green);
+      color: var(--navy);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── FEATURED CARD (primeira edição) ── */
+    .featured {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      margin-bottom: 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      min-height: 260px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      border: 1px solid var(--line);
+    }
+
+    .featured:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    }
+
+    .featured-body {
+      padding: 2rem 2rem 2rem 2.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 4px solid var(--green);
+    }
+
+    .featured-panel {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      gap: 1rem;
+    }
+
+    /* ── EDITION GRID ── */
+    .editions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── EDITION CARD ── */
+    .edition-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+    }
+
+    .edition-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+    }
+
+    .card-accent {
+      height: 5px;
+      width: 100%;
+    }
+
+    .card-body {
+      padding: 1.25rem 1.4rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .badge-weekly { background: #DCFCE7; color: var(--dgreen); }
+    .badge-mini   { background: #FFF1F2; color: var(--red); }
+    .badge-auto   { background: #FEF3C7; color: #92400E; }
+
+    .card-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .card-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .topic-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .card-footer {
+      padding: 0.85rem 1.4rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-pages {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .btn-ver {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-ver:hover {
+      background: var(--green);
+      color: var(--navy);
+      transform: scale(1.04);
+    }
+
+    .btn-ver svg { width: 13px; height: 13px; }
+
+    /* ── FEATURED specifics ── */
+    .featured .card-title {
+      font-size: 1.5rem;
+      margin: 0.4rem 0;
+    }
+
+    .featured .card-desc { font-size: 0.88rem; }
+
+    /* ── COMING SOON CARD ── */
+    .card-soon {
+      background: transparent;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--muted);
+      padding: 1.5rem;
+    }
+
+    .card-soon-icon {
+      font-size: 1.8rem;
+      opacity: 0.4;
+    }
+
+    .card-soon-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ── VCtv SVG LOGO ── */
+    .vctv-logo-big {
+      width: 100px;
+      height: 100px;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    /* ── MINI LOGO inline ── */
+    .logo-inline {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* ── FEATURED PANEL texts ── */
+    .fp-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .fp-title {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-align: center;
+    }
+
+    .fp-title span { color: var(--green); }
+
+    .fp-sub {
+      font-size: 0.78rem;
+      color: #64748B;
+      text-align: center;
+      max-width: 200px;
+    }
+
+    /* ── ABOUT STRIP ── */
+    .about-strip {
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 2rem 2.5rem;
+      margin-top: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .about-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .about-text h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .about-text p {
+      font-size: 0.85rem;
+      color: #64748B;
+      line-height: 1.6;
+    }
+
+    .about-text p b { color: #94A3B8; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 3px solid var(--green);
+      padding: 1.75rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-brand span { color: var(--green); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: #475569;
+    }
+
+    .footer-tagline {
+      font-size: 0.78rem;
+      color: #475569;
+      font-style: italic;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1    { animation: fadeUp 0.6s ease both; }
+    .hero-sub   { animation: fadeUp 0.6s 0.1s ease both; }
+    .hero-stats { animation: fadeUp 0.6s 0.2s ease both; }
+    .featured   { animation: fadeUp 0.5s 0.1s ease both; }
+
+    .edition-card:nth-child(1) { animation: fadeUp 0.5s 0.15s ease both; }
+    .edition-card:nth-child(2) { animation: fadeUp 0.5s 0.22s ease both; }
+    .edition-card:nth-child(3) { animation: fadeUp 0.5s 0.29s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .featured { grid-template-columns: 1fr; }
+      .featured-panel { display: none; }
+      .featured-body { border-left: none; border-top: 4px solid var(--green); }
+      .hero h1 { font-size: 2.2rem; }
+      .about-strip { flex-direction: column; text-align: center; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <a class="logo-wrap" href="#">
+      <div class="logo-icon" style="background:none; padding:0;">
+        <img src="logo_rounded.png" alt="VCtv" style="width:40px;height:40px;border-radius:10px;display:block;" />
+      </div>
+      <span class="logo-text">VC<span>tv</span></span>
+    </a>
+    <nav>
+      <a href="#edicoes">Edições</a>
+      <a href="#sobre">Sobre</a>
+      <a class="nav-badge" href="#edicoes">Ver tudo →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ── HERO ────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-eyebrow">◆ Novo jornal toda semana</div>
+  <h1>O jornal feito<br/>por você, <em>pra VC.</em></h1>
+  <p class="hero-sub">
+    Notícias, curiosidades, tecnologia, games e muito mais —
+    sempre caprichado, sempre no seu Status.
+  </p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-val">2</div>
+      <div class="stat-lbl">Edições publicadas</div>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+      <div class="stat-val">∞</div>
+      <div class="stat-lbl">Curiosidades</div>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+      <div class="stat-val">100%</div>
+      <div class="stat-lbl">Gratuito</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MAIN ─────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- Última edição em destaque -->
+  <div class="section-label" id="edicoes">
+    <h2>Última edição</h2>
+    <span class="pill">Destaque</span>
+  </div>
+
+  <div class="featured">
+    <div class="featured-body">
+      <div>
+        <div class="card-top" style="margin-bottom:0.6rem">
+          <span class="card-badge badge-weekly">📰 Edição da Semana</span>
+          <span class="card-date">28 de março de 2026</span>
+        </div>
+        <div class="card-title">VCtv News — Edição da Semana</div>
+        <p class="card-desc" style="margin-top:0.5rem">
+          Nesta edição: o Brasil lança o Plano Clima nacional com metas até 2035 e neutralidade
+          até 2050. J.P. Morgan revela o cenário global para 2026 com IA em expansão e inflação
+          persistente. Brasil lidera data centers na América Latina. First Stand 2026 de LoL
+          confirmado no Brasil. Previsão do tempo para o RS e muito mais.
+        </p>
+        <div class="card-topics" style="margin-top:0.75rem">
+          <span class="topic-tag">🌿 Clima</span>
+          <span class="topic-tag">⚡ Internacional</span>
+          <span class="topic-tag">💻 Tecnologia</span>
+          <span class="topic-tag">🎮 Games</span>
+          <span class="topic-tag">🌤 Tempo</span>
+          <span class="topic-tag">🔬 Ciência</span>
+        </div>
+      </div>
+      <div class="card-footer" style="border:none; padding: 1rem 0 0; margin-top:1rem">
+        <span class="card-pages">3 páginas · PDF</span>
+        <a class="btn-ver" href="VCtv_News_28mar2026_final.pdf" download>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
+          Baixar edição
+        </a>
+      </div>
+    </div>
+    <div class="featured-panel">
+      <!-- Logo grande real -->
+      <img src="logo_rounded.png" alt="VCtv" style="width:110px;height:110px;border-radius:22px;display:block;" />
+      <p class="fp-sub">Edição da Semana<br/>28 de março de 2026</p>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:4px">
+        <span style="font-size:0.7rem; background:rgba(0,200,83,0.15); color:var(--green); padding:3px 9px; border-radius:20px; border:1px solid rgba(0,200,83,0.3)">Criador: Caetano</span>
+        <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); color:#64748B; padding:3px 9px; border-radius:20px;">3 págs.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Todas as edições -->
+  <div class="section-label" style="margin-top:2.5rem">
+    <h2>Todas as edições</h2>
+  </div>
+
+  <div class="editions-grid">
+
+    <!-- Card 1: Mini Automobilismo -->
+    <div class="edition-card">
+      <div class="card-accent" style="background: linear-gradient(90deg, #E10600, #D97706)"></div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-badge badge-auto">🏎 Mini Edição</span>
+          <span class="card-date">29 de março de 2026</span>
+        </div>
+        <div class="card-title">Mini Edição — Automobilismo</div>
+        <p class="card-desc">
+          Antonelli vence o GP da China, Hamilton estreia no pódio pela Ferrari.
+          Novas regras de energia em Suzuka. Di Mauro lidera a Stock Car por 1 ponto.
+        </p>
+        <div class="card-topics">
+          <span class="topic-tag">🏎 F1 — China</span>
+          <span class="topic-tag">🇯🇵 GP Japão</span>
+          <span class="topic-tag">🏁 Stock Car</span>
+          <span class="topic-tag">📊 Campeonato</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-pages">3 páginas · PDF</span>
+        <a class="btn-ver" href="VCtv_MiniEdicao_Auto_29mar2026.pdf" download>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 2: Edição da Semana (destaque como card também) -->
+    <div class="edition-card">
+      <div class="card-accent" style="background: var(--green)"></div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-badge badge-weekly">📰 Edição da Semana</span>
+          <span class="card-date">28 de março de 2026</span>
+        </div>
+        <div class="card-title">VCtv News — Edição da Semana</div>
+        <p class="card-desc">
+          Plano Clima nacional, cenário global 2026, Brasil hub de data centers,
+          First Stand 2026 no Brasil, previsão do tempo RS e ciência de ponta.
+        </p>
+        <div class="card-topics">
+          <span class="topic-tag">🌿 Clima</span>
+          <span class="topic-tag">💻 Tecnologia</span>
+          <span class="topic-tag">🎮 Games</span>
+          <span class="topic-tag">🔬 Ciência</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-pages">3 páginas · PDF</span>
+        <a class="btn-ver" href="VCtv_News_28mar2026_final.pdf" download>
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <!-- Card em breve -->
+    <div class="card-soon">
+      <div class="card-soon-icon">📭</div>
+      <div class="card-soon-text">Próxima edição<br/><span style="font-weight:400; font-size:0.75rem">em breve — todo domingo</span></div>
+    </div>
+
+  </div>
+
+  <!-- Sobre strip -->
+  <div class="about-strip" id="sobre">
+    <div class="about-icon">🗞️</div>
+    <div class="about-text">
+      <h3>O que é a VCtv?</h3>
+      <p>
+        A VCtv é um jornal feito <b>toda semana</b> por Caetano Scolaro — com notícias, curiosidades,
+        previsão do tempo, tecnologia, games e muito mais. As <b>Mini Edições</b> saem no meio da semana
+        quando tem assunto bom demais pra esperar o domingo. Tudo caprichado, tudo de graça.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ───────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">VC<span>tv</span></div>
+    <div class="footer-copy">© 2026 VCtv · Criador e Editor: Caetano Scolaro</div>
+    <div class="footer-tagline">O jornal feito por você, pra VC.</div>
+  </div>
+</footer>
+
+</body>
+</html>
