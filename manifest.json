@@ -1,0 +1,52 @@
+{
+  "name": "VCtv TM — O jornal feito por você, pra VC.",
+  "short_name": "VCtv TM",
+  "description": "Jornal digital semanal feito por Caetano, Jaron e Érico. Edições de tecnologia, ciência, espaço e cultura direto no seu WhatsApp, todo sábado.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050309",
+  "theme_color": "#a050f0",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["news", "education", "magazines"],
+  "icons": [
+    {
+      "src": "logo_rounded.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "logo_rounded.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Última edição",
+      "short_name": "Última",
+      "description": "Abre a edição mais recente da VCtv",
+      "url": "./index.html#edicoes",
+      "icons": [{ "src": "logo_rounded.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Galeria de capas",
+      "short_name": "Galeria",
+      "description": "Visualiza as capas de todas as edições",
+      "url": "./index.html#galeria",
+      "icons": [{ "src": "logo_rounded.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "VCai 2.0",
+      "short_name": "VCai",
+      "description": "Abre o assistente virtual da VCtv",
+      "url": "./index.html#vcai",
+      "icons": [{ "src": "logo_rounded.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

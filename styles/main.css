@@ -1,0 +1,758 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — main.css
+   ───────────────────────────────────────────────────────────────
+   Base styles: reset, variáveis de design tokens, tipografia,
+   defaults globais e scrollbars. Esse arquivo deve ser carregado
+   antes de todos os outros estilos do site.
+   =========================================================== */
+
+/* ═══════════════════════════════════════════════════════════════
+   1. RESET / NORMALIZE
+   Reset minimalista inspirado em Josh Comeau + normalize, mas
+   sem carregar dependências externas.  Preserva o box-sizing
+   sensato, zera margens e aplica overflow-wrap seguro.
+   =========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px; /* compensa header fixo ao ancorar */
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+p,
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+#root,
+#__next,
+#app {
+  isolation: isolate;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. DESIGN TOKENS — MODO ESCURO (padrão)
+   Todas as cores, espaçamentos, radii, sombras e timings
+   são centralizados aqui para garantir consistência.
+   =========================================================== */
+
+:root {
+  /* ─── CORES BASE (DARK) ────────────────────────────────── */
+  --bg-black:        #050309;
+  --bg-deep:         #0a0812;
+  --bg-elevated:     #120e1c;
+  --bg-surface:      rgba(255, 255, 255, 0.04);
+  --bg-surface-2:    rgba(255, 255, 255, 0.06);
+  --bg-surface-3:    rgba(255, 255, 255, 0.08);
+
+  /* ─── ROXO ─────────────────────────────────────────────── */
+  --purple:          #a050f0;
+  --purple-soft:     #7837c8;
+  --purple-deep:     #371464;
+  --purple-glow:     rgba(160, 80, 240, 0.4);
+  --purple-subtle:   rgba(160, 80, 240, 0.15);
+
+  /* ─── VERDE ────────────────────────────────────────────── */
+  --green:           #00e66e;
+  --green-soft:      #00af55;
+  --green-deep:      #005a28;
+  --green-glow:      rgba(0, 230, 110, 0.4);
+  --green-subtle:    rgba(0, 230, 110, 0.15);
+
+  /* ─── TEXTO ────────────────────────────────────────────── */
+  --offwhite:        #f5f8f8;
+  --text-primary:    #f5f8f8;
+  --text-muted:      #9aa8b0;
+  --text-dim:        #5a6870;
+  --text-placeholder:#4a5258;
+
+  /* ─── CORES DE APOIO / STATUS ─────────────────────────── */
+  --red:             #f05050;
+  --amber:           #f0b050;
+  --blue:            #50a0f0;
+  --teal:            #50f0c8;
+  --wa:              #25d366;
+
+  /* ─── GRADIENTES PRINCIPAIS ────────────────────────────── */
+  --grad-main:       linear-gradient(135deg, #a050f0 0%, #00e66e 100%);
+  --grad-main-soft:  linear-gradient(135deg, rgba(160,80,240,0.5) 0%, rgba(0,230,110,0.5) 100%);
+  --grad-main-subtle:linear-gradient(135deg, rgba(160,80,240,0.15) 0%, rgba(0,230,110,0.15) 100%);
+  --grad-main-90:    linear-gradient(90deg,  #a050f0 0%, #00e66e 100%);
+  --grad-main-rev:   linear-gradient(315deg, #a050f0 0%, #00e66e 100%);
+  --grad-main-radial:radial-gradient(circle at 30% 20%, #a050f0 0%, #00e66e 80%);
+  --grad-bg-deep:    radial-gradient(ellipse at top, #1a0a2e 0%, #050309 60%);
+  --grad-bg-hero:    radial-gradient(ellipse at center, rgba(160,80,240,0.12) 0%, transparent 60%);
+
+  /* ─── BORDA (para cards Liquid Glass) ──────────────────── */
+  --border-subtle:   rgba(255, 255, 255, 0.08);
+  --border-regular:  rgba(255, 255, 255, 0.12);
+  --border-strong:   rgba(255, 255, 255, 0.20);
+  --border-glass-px: 1.5px;
+
+  /* ─── SOMBRAS ──────────────────────────────────────────── */
+  --shadow-xs:       0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm:       0 4px 8px -2px rgba(0, 0, 0, 0.4);
+  --shadow-md:       0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  --shadow-lg:       0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  --shadow-xl:       0 20px 60px -15px rgba(0, 0, 0, 0.8);
+  --shadow-2xl:      0 30px 80px -20px rgba(0, 0, 0, 0.9);
+  --shadow-glass:    0 20px 60px -15px rgba(0, 0, 0, 0.8),
+                     inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --shadow-glow-purple: 0 0 40px rgba(160, 80, 240, 0.35);
+  --shadow-glow-green:  0 0 40px rgba(0, 230, 110, 0.35);
+  --shadow-glow-mix:    0 0 40px rgba(160, 80, 240, 0.25),
+                        0 0 60px rgba(0, 230, 110, 0.15);
+
+  /* ─── BLUR ─────────────────────────────────────────────── */
+  --blur-sm:  blur(8px) saturate(150%);
+  --blur-md:  blur(20px) saturate(180%);
+  --blur-lg:  blur(40px) saturate(180%);
+  --blur-xl:  blur(60px) saturate(200%);
+
+  /* ─── RADII ────────────────────────────────────────────── */
+  --r-xs:     4px;
+  --r-sm:     8px;
+  --r-md:     12px;
+  --r-lg:     16px;
+  --r-xl:     24px;
+  --r-2xl:    32px;
+  --r-full:   999px;
+
+  /* ─── ESPAÇAMENTO (escala modular 8px) ─────────────────── */
+  --sp-0:     0;
+  --sp-1:     4px;
+  --sp-2:     8px;
+  --sp-3:     12px;
+  --sp-4:     16px;
+  --sp-5:     24px;
+  --sp-6:     32px;
+  --sp-7:     48px;
+  --sp-8:     64px;
+  --sp-9:     96px;
+  --sp-10:    128px;
+
+  /* ─── TIPOGRAFIA ───────────────────────────────────────── */
+  --font-display:    'Fraunces', 'Times New Roman', serif;
+  --font-body:       'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-round:      'Fredoka', 'Nunito', system-ui, sans-serif;
+  --font-mono:       ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+
+  --fs-xs:     clamp(0.68rem, 0.65rem + 0.1vw, 0.72rem);
+  --fs-sm:     clamp(0.78rem, 0.75rem + 0.12vw, 0.85rem);
+  --fs-base:   clamp(0.92rem, 0.88rem + 0.15vw, 1rem);
+  --fs-md:     clamp(1.05rem, 1rem + 0.2vw, 1.15rem);
+  --fs-lg:     clamp(1.2rem, 1.1rem + 0.4vw, 1.4rem);
+  --fs-xl:     clamp(1.5rem, 1.3rem + 0.8vw, 1.8rem);
+  --fs-2xl:    clamp(2rem, 1.6rem + 1.6vw, 2.8rem);
+  --fs-3xl:    clamp(2.5rem, 1.8rem + 3vw, 4rem);
+  --fs-4xl:    clamp(3rem, 2rem + 4vw, 5.5rem);
+
+  --lh-tight:  1.1;
+  --lh-snug:   1.25;
+  --lh-normal: 1.5;
+  --lh-relaxed:1.7;
+
+  --ls-tight:  -0.04em;
+  --ls-snug:   -0.02em;
+  --ls-normal: 0;
+  --ls-wide:   0.05em;
+  --ls-wider:  0.12em;
+
+  /* ─── TIMING / EASING ──────────────────────────────────── */
+  --dur-instant: 80ms;
+  --dur-fast:    160ms;
+  --dur-base:    240ms;
+  --dur-slow:    360ms;
+  --dur-slower:  560ms;
+  --dur-slowest: 900ms;
+
+  --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce:     cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  /* ─── LAYOUT ───────────────────────────────────────────── */
+  --max-w-content: 1200px;
+  --max-w-narrow:  720px;
+  --max-w-wide:    1440px;
+  --header-h:      72px;
+  --header-h-sm:   60px;
+
+  /* ─── Z-INDEX ──────────────────────────────────────────── */
+  --z-below:     -1;
+  --z-base:      0;
+  --z-header:    100;
+  --z-dropdown:  200;
+  --z-overlay:   400;
+  --z-modal:     500;
+  --z-toast:     700;
+  --z-intro:     900;
+  --z-topmost:   9999;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. DESIGN TOKENS — MODO CLARO
+   Overrides quando o atributo data-theme="light" está presente
+   no <html>.  O modo claro mantém a estética Liquid Glass mas
+   com base mais clara e bordas gradient com ajuste de saturação.
+   =========================================================== */
+
+html[data-theme='light'] {
+  --bg-black:        #f5f4f8;
+  --bg-deep:         #ebe8f0;
+  --bg-elevated:     #ffffff;
+  --bg-surface:      rgba(0, 0, 0, 0.04);
+  --bg-surface-2:    rgba(0, 0, 0, 0.06);
+  --bg-surface-3:    rgba(0, 0, 0, 0.08);
+
+  --offwhite:        #0a0812;
+  --text-primary:    #0a0812;
+  --text-muted:      #4a5868;
+  --text-dim:        #7a8890;
+  --text-placeholder:#a0a8b0;
+
+  --border-subtle:   rgba(0, 0, 0, 0.08);
+  --border-regular:  rgba(0, 0, 0, 0.12);
+  --border-strong:   rgba(0, 0, 0, 0.20);
+
+  --shadow-xs:       0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-sm:       0 4px 8px -2px rgba(0, 0, 0, 0.08);
+  --shadow-md:       0 8px 24px -6px rgba(0, 0, 0, 0.12);
+  --shadow-lg:       0 16px 40px -12px rgba(0, 0, 0, 0.15);
+  --shadow-xl:       0 20px 60px -15px rgba(0, 0, 0, 0.2);
+  --shadow-glass:    0 20px 60px -15px rgba(0, 0, 0, 0.15),
+                     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  --grad-bg-deep:    radial-gradient(ellipse at top, #dcd4f0 0%, #f5f4f8 60%);
+  --grad-bg-hero:    radial-gradient(ellipse at center, rgba(160, 80, 240, 0.06) 0%, transparent 60%);
+
+  --purple-subtle:   rgba(160, 80, 240, 0.10);
+  --green-subtle:    rgba(0, 175, 85, 0.10);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4. BODY E BACKGROUND GLOBAL
+   O fundo escuro respira com um gradient radial roxo sutil.
+   Uma camada de textura fina adiciona profundidade extra.
+   =========================================================== */
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--text-primary);
+  background: var(--bg-black);
+  background-image: var(--grad-bg-deep);
+  background-attachment: fixed;
+  transition:
+    background-color var(--dur-slower) var(--ease-out-smooth),
+    color var(--dur-slower) var(--ease-out-smooth);
+}
+
+/* Camada estrelada sutil (só no dark mode) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.08), transparent 50%),
+    radial-gradient(1px   1px   at 70% 60%, rgba(160,80,240,0.06), transparent 50%),
+    radial-gradient(1.5px 1.5px at 40% 80%, rgba(0,230,110,0.05), transparent 50%),
+    radial-gradient(1px   1px   at 80% 15%, rgba(255,255,255,0.07), transparent 50%),
+    radial-gradient(1.5px 1.5px at 10% 70%, rgba(160,80,240,0.05), transparent 50%),
+    radial-gradient(1px   1px   at 60% 10%, rgba(0,230,110,0.06), transparent 50%);
+  background-size: 200% 200%;
+  pointer-events: none;
+  z-index: -2;
+  opacity: 0.8;
+  animation: stars-drift 120s linear infinite;
+}
+
+html[data-theme='light'] body::before {
+  opacity: 0.3;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(160,80,240,0.1), transparent 50%),
+    radial-gradient(1px 1px at 70% 60%, rgba(0,175,85,0.06), transparent 50%);
+}
+
+@keyframes stars-drift {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+/* Wrapper principal que hospeda o conteúdo depois da intro */
+#app-root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. TIPOGRAFIA GLOBAL
+   =========================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--fs-3xl); }
+h2 { font-size: var(--fs-2xl); }
+h3 { font-size: var(--fs-xl); }
+h4 { font-size: var(--fs-lg); }
+h5 { font-size: var(--fs-md); }
+h6 { font-size: var(--fs-base); font-weight: 700; }
+
+p {
+  line-height: var(--lh-normal);
+  color: var(--text-primary);
+}
+
+small {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+em {
+  font-style: italic;
+  color: var(--purple);
+}
+
+strong, b {
+  font-weight: 700;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. LINKS
+   =========================================================== */
+
+a {
+  color: var(--green);
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--purple);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. UTILITIES — containers, stacks, helpers
+   =========================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--max-w-content);
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
+}
+
+.container-narrow { max-width: var(--max-w-narrow); }
+.container-wide   { max-width: var(--max-w-wide); }
+
+.stack-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.stack-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: var(--sp-3);
+  align-items: center;
+}
+
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-4);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-gradient {
+  background: var(--grad-main);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #c080ff 0%, #a050f0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-green {
+  background: linear-gradient(135deg, #6ef0a0 0%, #00e66e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.muted    { color: var(--text-muted); }
+.dim      { color: var(--text-dim); }
+.purple   { color: var(--purple); }
+.green    { color: var(--green); }
+
+.bold     { font-weight: 700; }
+.semibold { font-weight: 600; }
+.medium   { font-weight: 500; }
+
+.italic   { font-style: italic; }
+
+.display  { font-family: var(--font-display); }
+.body     { font-family: var(--font-body); }
+.round    { font-family: var(--font-round); }
+
+.uppercase { text-transform: uppercase; letter-spacing: var(--ls-wider); }
+
+/* ═══════════════════════════════════════════════════════════════
+   8. SCROLLBAR CUSTOMIZADA
+   =========================================================== */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--purple-soft), var(--green-soft));
+  border-radius: var(--r-full);
+  border: 2px solid var(--bg-black);
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grad-main);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--purple-soft) transparent;
+}
+
+/* Thumbs em contextos específicos */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-regular);
+  border: none;
+  border-radius: var(--r-full);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. SELECTION
+   =========================================================== */
+
+::selection {
+  background: var(--purple);
+  color: var(--offwhite);
+}
+
+html[data-theme='light'] ::selection {
+  background: var(--purple);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. FOCUS RING GLOBAL
+   Todos os elementos interativos ganham um contorno gradient
+   visível quando focados via teclado (focus-visible).
+   =========================================================== */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg-black),
+    0 0 0 4px var(--purple),
+    0 0 0 6px var(--green);
+  border-radius: var(--r-md);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. INPUTS / FORMS BASE
+   O visual detalhado de inputs fica em components.css; aqui
+   só zeramos defaults do navegador.
+   =========================================================== */
+
+input,
+textarea,
+select {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  width: 100%;
+  font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px var(--bg-elevated) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   12. MAIN / SECTION defaults
+   =========================================================== */
+
+main {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+section {
+  position: relative;
+  padding-block: var(--sp-7);
+}
+
+section + section {
+  border-top: 1px solid transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   13. TEXTURA GRAFITE SUTIL — overlay global opcional
+   Pode ser aplicada a qualquer elemento com .has-noise.
+   =========================================================== */
+
+.has-noise {
+  position: relative;
+  isolation: isolate;
+}
+
+.has-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/noise.svg');
+  background-repeat: repeat;
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: 0.035;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+html[data-theme='light'] .has-noise::after {
+  mix-blend-mode: multiply;
+  opacity: 0.03;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   14. PREFERS-REDUCED-MOTION
+   Pequena sanidade global — animações detalhadas são ajustadas
+   caso a caso nos arquivos específicos (intro.css, etc.).
+   =========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body::before {
+    animation: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   15. PRINT
+   Simples — remove tudo que não for conteúdo para impressão.
+   =========================================================== */
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  body::before,
+  header,
+  footer,
+  nav,
+  .no-print,
+  #vcai-fab,
+  #intro-root,
+  #toast-stack,
+  #scroll-top {
+    display: none !important;
+  }
+  main { padding: 0 !important; }
+  a { color: black !important; text-decoration: underline; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   16. LOADING SKELETON UTILITY
+   Base para os skeletons de loading de PDFs/cards.
+   =========================================================== */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-surface);
+  border-radius: var(--r-md);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shine 1.4s var(--ease-standard) infinite;
+  transform: translateX(-100%);
+}
+
+@keyframes skeleton-shine {
+  to { transform: translateX(100%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   17. DIVIDER
+   =========================================================== */
+
+.divider {
+  height: 1px;
+  width: 100%;
+  margin-block: var(--sp-5);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-regular) 20%,
+    var(--purple-subtle) 50%,
+    var(--border-regular) 80%,
+    transparent 100%
+  );
+  border: none;
+}
+
+.divider-strong {
+  height: 1px;
+  width: 100%;
+  margin-block: var(--sp-6);
+  background: var(--grad-main-soft);
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   18. DEBUG HELPER (só ativa com .debug-borders no html)
+   =========================================================== */
+
+html.debug-borders * {
+  outline: 1px dashed rgba(255, 0, 255, 0.3);
+}
