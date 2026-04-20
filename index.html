@@ -1,1100 +1,349 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="VCtv News — O jornal feito por você, pra VC. Tecnologia, ciência, espaço e muito mais, todo sábado."/>
-<title>VCtv News — O jornal feito por você, pra VC.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --green:#00C853;--dgreen:#007B33;--navy:#0F172A;--slate:#1E293B;
-  --muted:#64748B;--line:#E2E8F0;--card:#F8FAFC;--white:#fff;
-  --red:#DC2626;--amber:#D97706;--violet:#7C3AED;--teal:#0D9488;
-  --blue:#3B82F6;--wa:#25D366;--bg:#ECF2EC;
-  --radius:16px;--shadow:0 2px 16px rgba(0,0,0,.07);
-  --shadow-lg:0 8px 32px rgba(0,0,0,.13);
-}
-html{scroll-behavior:smooth}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--slate);min-height:100vh;overflow-x:hidden}
- 
-/* ── SCROLL BAR ── */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
- 
-/* ── HEADER ── */
-header{background:var(--navy);position:sticky;top:0;z-index:200;border-bottom:3px solid var(--green);backdrop-filter:blur(12px)}
-.header-inner{max-width:1140px;margin:0 auto;padding:0 1.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-.logo-wrap img{width:36px;height:36px;border-radius:9px;display:block;transition:transform .3s}
-.logo-wrap:hover img{transform:rotate(-8deg) scale(1.1)}
-.logo-text{font-family:'Fraunces',serif;font-weight:900;font-size:1.4rem;color:var(--white);letter-spacing:-.03em}
-.logo-text span{color:var(--green)}
-nav{display:flex;gap:1rem;align-items:center}
-nav a{color:#94A3B8;text-decoration:none;font-size:.82rem;font-weight:500;transition:color .2s;white-space:nowrap}
-nav a:hover{color:var(--white)}
-.nav-wa{display:flex;align-items:center;gap:5px;background:var(--wa);color:var(--white)!important;font-size:.73rem;font-weight:700;padding:5px 12px;border-radius:20px;transition:opacity .2s}
-.nav-wa:hover{opacity:.85}
-.nav-wa svg{width:13px;height:13px;fill:var(--white);flex-shrink:0}
-.nav-bell{background:none;border:none;cursor:pointer;color:#94A3B8;font-size:1.1rem;transition:color .2s;padding:4px;border-radius:8px}
-.nav-bell:hover{color:var(--green)}
- 
-/* ── WA BANNER ── */
-.wa-banner{background:linear-gradient(135deg,#128C7E,var(--wa));padding:.65rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
-.wa-banner-text{color:var(--white);font-size:.85rem;font-weight:600}
-.wa-banner-text span{opacity:.8;font-weight:400}
-.wa-banner-btn{background:var(--white);color:#128C7E;font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:20px;text-decoration:none;transition:transform .15s;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.wa-banner-btn:hover{transform:scale(1.04)}
-.wa-banner-btn svg{width:13px;height:13px;fill:#128C7E}
- 
-/* ── HERO ── */
-.hero{background:var(--navy);padding:4rem 1.5rem 3rem;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(0,200,83,.09) 0%,transparent 60%);pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none}
-.hero-eyebrow{display:inline-block;background:rgba(0,200,83,.13);color:var(--green);font-size:.73rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:1rem;border:1px solid rgba(0,200,83,.28)}
-.hero h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.8rem);color:var(--white);line-height:1.07;letter-spacing:-.04em;margin-bottom:.85rem}
-.hero h1 em{font-style:italic;color:var(--green)}
-.hero-sub{color:#94A3B8;font-size:.92rem;max-width:420px;margin:0 auto 1.4rem;line-height:1.65}
-.hero-team{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:6px 16px;margin-bottom:1.6rem}
-.hero-team span{font-size:.75rem;color:#64748B}
-.hero-team b{color:#94A3B8;font-weight:600}
-.hero-stats{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
-.stat{text-align:center}
-.stat-val{font-family:'Fraunces',serif;font-weight:700;font-size:1.75rem;color:var(--white);line-height:1}
-.stat-val[data-target]{transition:opacity .3s}
-.stat-lbl{font-size:.68rem;color:#475569;margin-top:2px;text-transform:uppercase;letter-spacing:.06em}
-.stat-sep{width:1px;background:#1E293B;align-self:stretch}
- 
-/* ── MAIN ── */
-main{max-width:1140px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
- 
-/* ── SECTION LABEL ── */
-.section-label{display:flex;align-items:center;gap:9px;margin-bottom:1.4rem}
-.section-label h2{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:700;color:var(--navy);letter-spacing:-.03em}
-.pill{background:var(--green);color:var(--navy);font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
-.pill-muted{background:var(--line);color:var(--muted);font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
- 
-/* ── FILTER TABS ── */
-.filter-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.filter-btn{background:var(--white);border:1.5px solid var(--line);color:var(--muted);font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .2s;font-family:inherit}
-.filter-btn:hover{border-color:var(--green);color:var(--green)}
-.filter-btn.active{background:var(--navy);border-color:var(--navy);color:var(--white)}
- 
-/* ── FEATURED ── */
-.featured{background:var(--white);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:1.2rem;display:grid;grid-template-columns:1fr 270px;min-height:230px;transition:transform .25s,box-shadow .25s;border:1px solid var(--line)}
-.featured:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.featured-body{padding:1.6rem 1.6rem 1.4rem 1.9rem;display:flex;flex-direction:column;justify-content:space-between;border-left:4px solid var(--green)}
-.featured-panel{background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;gap:.75rem}
-.fp-sub{font-size:.72rem;color:#475569;text-align:center;line-height:1.5}
-.featured .card-title{font-size:1.4rem;margin:.3rem 0}
-.featured .card-desc{font-size:.86rem}
- 
-/* ── GRID ── */
-.editions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:1rem}
- 
-/* ── CARD ── */
-.edition-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--line);overflow:hidden;transition:transform .25s,box-shadow .25s,opacity .3s;display:flex;flex-direction:column;box-shadow:0 1px 6px rgba(0,0,0,.04)}
-.edition-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
-.edition-card.hidden{display:none}
-.card-accent{height:5px;width:100%}
-.card-body{padding:1.1rem 1.2rem .85rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
-.card-top{display:flex;align-items:center;justify-content:space-between}
-.card-badge{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px}
-.badge-weekly{background:#DCFCE7;color:var(--dgreen)}
-.badge-mini{background:#EDE9FE;color:#4C1D95}
-.badge-especial{background:#FFF1F2;color:#881337}
-.badge-auto{background:#FEF3C7;color:#92400E}
-.badge-space{background:#EFF6FF;color:#1E40AF}
-.badge-sci{background:#F0FDFA;color:#134E4A}
-.badge-foto{background:#FFF7ED;color:#9A3412}
-.badge-tech{background:#EDE9FE;color:#4C1D95}
-.badge-inet{background:#F0FFFE;color:#0E7490}
-.card-date{font-size:.7rem;color:var(--muted)}
-.card-title{font-family:'Fraunces',serif;font-weight:700;font-size:1.03rem;color:var(--navy);letter-spacing:-.02em;line-height:1.3}
-.card-desc{font-size:.79rem;color:var(--muted);line-height:1.55;flex:1}
-.card-topics{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
-.topic-tag{font-size:.64rem;font-weight:600;padding:2px 6px;border-radius:20px;background:var(--card);color:var(--muted);border:1px solid var(--line)}
-.card-footer{padding:.72rem 1.2rem;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.card-pages{font-size:.69rem;color:var(--muted)}
-.btn-ver{display:inline-flex;align-items:center;gap:5px;background:var(--navy);color:var(--white);font-size:.74rem;font-weight:600;padding:5px 12px;border-radius:20px;border:none;cursor:pointer;transition:background .2s,transform .15s;text-decoration:none;font-family:inherit}
-.btn-ver:hover{background:var(--green);color:var(--navy);transform:scale(1.04)}
-.btn-ver svg{width:12px;height:12px}
-.btn-ver:disabled{background:var(--line);color:var(--muted);cursor:not-allowed;transform:none}
- 
-/* ── CARDS: SOON & EMPTY ── */
-.card-soon{background:transparent;border:2px dashed var(--line);border-radius:var(--radius);min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--muted);padding:1.5rem;cursor:pointer;transition:border-color .3s}
-.card-soon:hover{border-color:var(--green)}
-.card-soon-icon{font-size:1.6rem;opacity:.35;transition:opacity .3s}
-.card-soon:hover .card-soon-icon{opacity:.7}
-.card-soon-text{font-size:.78rem;font-weight:600;text-align:center}
-.no-results{text-align:center;padding:3rem 1rem;color:var(--muted);display:none}
-.no-results.show{display:block}
- 
-/* ── STRIPS ── */
-.team-strip{background:var(--white);border-radius:18px;border:1px solid var(--line);padding:1.5rem 2rem;margin-top:2rem;display:flex;align-items:center;gap:1.75rem;box-shadow:var(--shadow)}
-.team-avatars{display:flex;gap:9px;flex-shrink:0}
-.avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;background:var(--card);border:2px solid var(--line)}
-.team-text h3{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:4px}
-.team-text p{font-size:.82rem;color:var(--muted);line-height:1.6}
-.team-text b{color:var(--slate);font-weight:600}
-.about-strip{background:var(--navy);border-radius:18px;padding:1.5rem 2rem;margin-top:1rem;display:flex;align-items:center;gap:1.5rem}
-.about-icon{font-size:2rem;flex-shrink:0}
-.about-text h3{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:4px}
-.about-text p{font-size:.82rem;color:#64748B;line-height:1.6}
-.about-text b{color:#94A3B8}
-.wa-section{background:linear-gradient(135deg,#0F2017,#0A2E1A);border-radius:18px;padding:1.75rem 2rem;margin-top:1rem;display:flex;align-items:center;gap:1.75rem;border:1px solid rgba(37,211,102,.22)}
-.wa-icon{font-size:2.6rem;flex-shrink:0}
-.wa-text h3{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;color:var(--white);margin-bottom:5px}
-.wa-text p{font-size:.82rem;color:#6B7280;line-height:1.6;margin-bottom:.9rem}
-.wa-text p b{color:var(--wa)}
-.btn-wa{display:inline-flex;align-items:center;gap:7px;background:var(--wa);color:var(--white);font-size:.83rem;font-weight:700;padding:9px 19px;border-radius:25px;text-decoration:none;transition:transform .15s,opacity .2s}
-.btn-wa:hover{transform:scale(1.04);opacity:.92}
-.btn-wa svg{width:16px;height:16px;fill:var(--white)}
-.wa-schedule{display:inline-flex;align-items:center;gap:5px;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);border-radius:20px;padding:4px 11px;font-size:.73rem;color:var(--wa);font-weight:600;margin-left:8px}
- 
-/* ── NOTIFICATIONS MODAL ── */
-.notif-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
-.notif-overlay.open{display:flex;animation:fadeIn .2s ease}
-.notif-box{background:var(--white);border-radius:20px;padding:2rem;width:100%;max-width:420px;box-shadow:var(--shadow-lg)}
-.notif-box h3{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
-.notif-box p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:1.2rem}
-.notif-options{display:flex;flex-direction:column;gap:.65rem}
-.notif-opt{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;cursor:pointer;text-decoration:none;transition:border-color .2s,transform .15s}
-.notif-opt:hover{border-color:var(--green);transform:scale(1.02)}
-.notif-opt-icon{font-size:1.5rem;flex-shrink:0}
-.notif-opt-text strong{display:block;font-size:.88rem;color:var(--navy);font-weight:700}
-.notif-opt-text span{font-size:.78rem;color:var(--muted)}
-.notif-close{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.82rem;margin-top:1rem;width:100%;text-align:center;transition:color .2s}
-.notif-close:hover{color:var(--navy)}
- 
-/* ── COMMENTS ── */
-.comments-section{margin-top:2.5rem}
-.comment-form{background:var(--white);border-radius:var(--radius);border:1px solid var(--line);padding:1.4rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
-.comment-form h4{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.75rem}
-.form-row{display:flex;gap:.65rem;margin-bottom:.65rem}
-.form-row input,.comment-form textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:.48rem .7rem;font-size:.84rem;font-family:inherit;outline:none;background:var(--card);transition:border-color .2s;color:var(--slate)}
-.form-row input:focus,.comment-form textarea:focus{border-color:var(--green);background:var(--white)}
-.comment-form textarea{resize:vertical;min-height:76px;width:100%;margin-bottom:.65rem}
-.form-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
-.form-note{font-size:.72rem;color:var(--muted)}
-.btn-comment{background:var(--green);color:var(--navy);border:none;border-radius:20px;padding:7px 18px;font-size:.81rem;font-weight:700;cursor:pointer;transition:transform .15s,opacity .2s;font-family:inherit}
-.btn-comment:hover{transform:scale(1.03);opacity:.9}
-.comments-list{display:flex;flex-direction:column;gap:.8rem}
-.comment-item{background:var(--white);border-radius:13px;border:1px solid var(--line);padding:1rem 1.15rem;box-shadow:0 1px 5px rgba(0,0,0,.03)}
-.comment-header{display:flex;align-items:center;gap:8px;margin-bottom:.35rem;flex-wrap:wrap}
-.comment-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--teal));display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--white);font-weight:700;flex-shrink:0}
-.comment-name{font-weight:700;font-size:.84rem;color:var(--navy)}
-.comment-date{font-size:.68rem;color:var(--muted);margin-left:auto}
-.comment-text{font-size:.83rem;color:var(--slate);line-height:1.55}
-.no-comments{text-align:center;padding:2rem;color:var(--muted);font-size:.84rem;border:2px dashed var(--line);border-radius:12px}
-.comment-success{background:#DCFCE7;color:var(--dgreen);border-radius:10px;padding:.6rem 1rem;font-size:.82rem;font-weight:600;margin-bottom:.5rem;display:none}
-.comment-success.show{display:block;animation:fadeUp .3s ease}
- 
-/* ── VCAI ── */
-#ai-btn{position:fixed;bottom:26px;right:26px;z-index:300;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--green),#00A040);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,200,83,.4);transition:transform .2s,box-shadow .2s;font-size:.78rem;color:var(--navy);font-weight:900;letter-spacing:-.02em;font-family:'Fraunces',serif;line-height:1}
-#ai-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(0,200,83,.5)}
-#ai-btn.open{background:var(--navy);color:var(--white);box-shadow:0 4px 18px rgba(0,0,0,.28)}
-#ai-panel{position:fixed;bottom:90px;right:26px;z-index:300;width:340px;max-height:500px;background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);border:1px solid var(--line);display:none;flex-direction:column;overflow:hidden}
-#ai-panel.open{display:flex;animation:fadeUp .22s ease}
-.ai-header{background:var(--navy);padding:.85rem 1.1rem;display:flex;align-items:center;gap:9px}
-.ai-header-icon{width:29px;height:29px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
-.ai-header-text h4{font-size:.88rem;font-weight:700;color:var(--white)}
-.ai-header-text p{font-size:.67rem;color:#64748B}
-.ai-badge{margin-left:auto;background:rgba(0,200,83,.18);color:var(--green);font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.05em}
-.ai-close{background:none;border:none;cursor:pointer;color:#475569;font-size:.95rem;transition:color .2s;margin-left:5px}
-.ai-close:hover{color:var(--white)}
-.ai-messages{flex:1;overflow-y:auto;padding:.85rem;display:flex;flex-direction:column;gap:.6rem;scroll-behavior:smooth}
-.ai-messages::-webkit-scrollbar{width:3px}
-.ai-messages::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
-.msg{max-width:88%;padding:.5rem .8rem;border-radius:13px;font-size:.8rem;line-height:1.5}
-.msg.bot{background:var(--card);color:var(--slate);border-bottom-left-radius:3px;align-self:flex-start}
-.msg.user{background:var(--navy);color:var(--white);border-bottom-right-radius:3px;align-self:flex-end}
-.msg.typing{color:var(--muted);font-style:italic}
-.ai-input-area{padding:.62rem .82rem;border-top:1px solid var(--line);display:flex;gap:6px;align-items:flex-end}
-#ai-input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:.44rem .66rem;font-size:.8rem;font-family:inherit;resize:none;outline:none;background:var(--card);transition:border-color .2s;max-height:82px}
-#ai-input:focus{border-color:var(--green)}
-#ai-send{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .15s}
-#ai-send:hover{background:var(--dgreen);transform:scale(1.05)}
-#ai-send svg{width:13px;height:13px;fill:var(--navy)}
-#ai-send:disabled{background:var(--line);cursor:not-allowed;transform:none}
- 
-/* ── EASTER EGGS ── */
-#ee-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:10px 20px;border-radius:30px;font-size:.83rem;font-weight:600;z-index:999;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;border:2px solid var(--green)}
-#ee-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#konami-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:998;display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:2rem}
-#konami-overlay.show{display:flex;animation:fadeIn .4s ease}
-#konami-overlay h2{font-family:'Fraunces',serif;font-size:2.2rem;color:var(--green);text-align:center}
-#konami-overlay p{color:#94A3B8;font-size:.95rem;text-align:center;max-width:360px}
-#konami-overlay button{background:var(--green);color:var(--navy);border:none;border-radius:20px;padding:8px 22px;font-size:.88rem;font-weight:700;cursor:pointer;margin-top:.5rem}
- 
-/* ── FOOTER ── */
-footer{background:var(--navy);border-top:3px solid var(--green);padding:1.5rem 1.5rem}
-.footer-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.footer-brand{font-family:'Fraunces',serif;font-size:1rem;font-weight:700;color:var(--white)}
-.footer-brand span{color:var(--green)}
-.footer-copy{font-size:.72rem;color:#475569;text-align:center}
-.footer-wa{display:flex;align-items:center;gap:5px;color:var(--wa);font-size:.72rem;font-weight:600;text-decoration:none}
-.footer-wa svg{width:13px;height:13px;fill:var(--wa)}
- 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.fade-in{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
-.fade-in.visible{opacity:1;transform:translateY(0)}
- 
-/* ── RESPONSIVE ── */
-@media(max-width:720px){
-  .featured{grid-template-columns:1fr}
-  .featured-panel{display:none}
-  .featured-body{border-left:none;border-top:4px solid var(--green)}
-  .hero h1{font-size:2rem}
-  .about-strip,.team-strip,.wa-section{flex-direction:column;text-align:center}
-  .team-avatars{justify-content:center}
-  .footer-inner{flex-direction:column;text-align:center}
-  nav a:not(.nav-wa):not(.nav-bell){display:none}
-  #ai-panel{width:calc(100vw - 32px);right:16px}
-  .form-row{flex-direction:column}
-  .wa-schedule{margin-left:0;margin-top:6px}
-  .header-inner{gap:.5rem}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>VCtv TM — O jornal feito por você, pra VC.</title>
+  <meta name="description" content="VCtv TM — jornal digital semanal sobre tecnologia, ciência, espaço e cultura. Feito com carinho por Caetano, Jaron e Érico. Mesma essência. Nova era. 💜💚" />
+  <meta name="theme-color" content="#050309" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="author" content="Caetano, Jaron, Érico" />
+  <link rel="canonical" href="https://cactatano.github.io/vctv/" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="VCtv TM — Uma nova era do jornal digital" />
+  <meta property="og:description" content="Jornal digital semanal, feito por você, pra VC. 💜💚" />
+  <meta property="og:image" content="./logo_rounded.png" />
+  <meta property="og:url" content="https://cactatano.github.io/vctv/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./logo_rounded.png" type="image/png" />
+  <link rel="apple-touch-icon" href="./logo_rounded.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VCtv TM" />
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="./styles/main.css" />
+  <link rel="stylesheet" href="./styles/liquid-glass.css" />
+  <link rel="stylesheet" href="./styles/animations.css" />
+  <link rel="stylesheet" href="./styles/components.css" />
+  <link rel="stylesheet" href="./styles/sections.css" />
+  <link rel="stylesheet" href="./styles/intro.css" />
+  <link rel="stylesheet" href="./styles/vcai.css" />
+  <link rel="stylesheet" href="./styles/responsive.css" />
 </head>
 <body>
- 
-<!-- HEADER -->
-<header>
-  <div class="header-inner">
-    <a class="logo-wrap" href="#" id="logo-click">
-      <img src="logo_rounded.png" alt="VCtv" id="logo-img"/>
-      <span class="logo-text">VC<span>tv</span></span>
+
+<!-- 1. WhatsApp Banner -->
+<div id="wa-banner" class="wa-banner glass-pill glass-pill-strong" role="region" aria-label="Canal do WhatsApp">
+  <span class="wa-banner__icon" aria-hidden="true">💬</span>
+  <a class="wa-banner__link" href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" target="_blank" rel="noopener">
+    Entra no canal oficial da VCtv no WhatsApp — fica por dentro das próximas edições.
+  </a>
+  <button class="wa-banner__close" type="button" aria-label="Fechar banner">×</button>
+</div>
+
+<!-- 2. Header -->
+<header id="site-header" class="site-header" role="banner">
+  <div class="site-header__inner">
+    <a class="site-header__logo" href="#top" aria-label="VCtv TM — início">
+      <img src="./logo_rounded.png" alt="" class="site-header__logo-img" aria-hidden="true" />
+      <span class="site-header__logo-text">
+        <span class="gradient-text">VCtv</span><sup>TM</sup>
+      </span>
     </a>
-    <nav>
-      <a href="#edicoes">Edições</a>
-      <a href="#equipe">Equipe</a>
-      <a href="#comentarios">Comentários</a>
-      <button class="nav-bell" onclick="openNotif()" title="Notificações">🔔</button>
-      <a class="nav-wa" href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.558 4.124 1.534 5.856L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.9 0-3.662-.512-5.176-1.402l-.371-.22-3.762.927.975-3.649-.241-.386A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-        Canal
-      </a>
+
+    <nav class="site-header__nav" aria-label="Navegação principal">
+      <a href="#hero" class="site-header__nav-link">Início</a>
+      <a href="#editions" class="site-header__nav-link">Edições</a>
+      <a href="#gallery" class="site-header__nav-link">Galeria</a>
+      <a href="#favorites" class="site-header__nav-link">Favoritos</a>
+      <a href="#team" class="site-header__nav-link">Equipe</a>
+      <a href="#about" class="site-header__nav-link">Sobre</a>
     </nav>
+
+    <div class="site-header__actions">
+      <button id="theme-toggle" class="site-header__btn glass-circle" type="button" aria-label="Alternar tema" title="Tema (Shift+T)">
+        <span class="theme-toggle__sun" aria-hidden="true">☀️</span>
+        <span class="theme-toggle__moon" aria-hidden="true">🌙</span>
+      </button>
+      <button id="notif-bell" class="site-header__btn glass-circle" type="button" aria-label="Notificações">🔔</button>
+      <button id="mobile-nav-toggle" class="site-header__btn site-header__btn--mobile glass-circle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav">☰</button>
+    </div>
   </div>
 </header>
- 
-<!-- WA BANNER -->
-<div class="wa-banner">
-  <div class="wa-banner-text">📱 Novo jornal <b>todo sábado</b> no WhatsApp! <span>Siga e não perca nada</span></div>
-  <a class="wa-banner-btn" href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.558 4.124 1.534 5.856L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.9 0-3.662-.512-5.176-1.402l-.371-.22-3.762.927.975-3.649-.241-.386A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-    Seguir →
-  </a>
-</div>
- 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">◆ Novo jornal todo sábado</div>
-  <h1>O jornal feito<br/>por você, <em>pra VC.</em></h1>
-  <p class="hero-sub">Tecnologia, ciência, espaço, games e muito mais — sempre caprichado, sempre no seu WhatsApp.</p>
-  <div class="hero-team">
-    <span>✍️ Feito por</span>
-    <b>Caetano</b><span>·</span><b>Érico</b><span>·</span><b>Jaron</b>
-  </div>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-val" data-target="13">0</div><div class="stat-lbl">Edições</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">Curiosidades</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><div class="stat-val">100%</div><div class="stat-lbl">Gratuito</div></div>
-  </div>
-</section>
- 
-<!-- MAIN -->
-<main>
- 
-  <!-- ÚLTIMA EDIÇÃO -->
-  <div class="section-label fade-in" id="edicoes">
-    <h2>Última edição</h2>
-    <span class="pill">Destaque</span>
-  </div>
- 
-  <div class="featured fade-in">
-    <div class="featured-body">
-      <div>
-        <div class="card-top" style="margin-bottom:.5rem">
-          <span class="card-badge badge-inet">📡 Mini Edição · Tecnologia</span>
-          <span class="card-date">15 de abril de 2026</span>
-        </div>
-        <div class="card-title">O Futuro da Internet — 6G</div>
-        <p class="card-desc" style="margin-top:.4rem">ITU define IMT-2030 como padrão do 6G, com requisitos técnicos aprovados em março de 2026. 3GPP padroniza especificações globais. IA/ML integrada à rede. FCC debate segurança e espectro. Lançamento comercial previsto para 2030+.</p>
-        <div class="card-topics" style="margin-top:.6rem">
-          <span class="topic-tag">📡 6G / IMT-2030</span>
-          <span class="topic-tag">🤖 IA na Rede</span>
-          <span class="topic-tag">🔐 Segurança FCC</span>
-          <span class="topic-tag">🌐 3GPP</span>
-        </div>
+
+<nav id="mobile-nav" class="mobile-nav" aria-label="Menu mobile">
+  <a href="#hero" class="mobile-nav__link">Início</a>
+  <a href="#editions" class="mobile-nav__link">Edições</a>
+  <a href="#gallery" class="mobile-nav__link">Galeria</a>
+  <a href="#favorites" class="mobile-nav__link">Favoritos</a>
+  <a href="#team" class="mobile-nav__link">Equipe</a>
+  <a href="#about" class="mobile-nav__link">Sobre</a>
+  <a href="#comments" class="mobile-nav__link">Comentários</a>
+  <button class="mobile-nav__link mobile-nav__replay" type="button" data-action="replay-intro">🎬 Rever apresentação</button>
+</nav>
+
+<main id="top">
+
+  <!-- 3. Hero -->
+  <section id="hero" class="hero" aria-labelledby="hero-title">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__orb hero__orb--purple"></div>
+      <div class="hero__orb hero__orb--green"></div>
+      <div class="hero__stars"></div>
+    </div>
+
+    <div class="hero__inner">
+      <div class="hero__badge glass-pill">
+        <span class="hero__badge-dot" aria-hidden="true"></span>
+        Nova era · VCtv TM · 2026
       </div>
-      <div class="card-footer" style="border:none;padding:.9rem 0 0;margin-top:.75rem">
-        <span class="card-pages">4 páginas · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_Mini_6G.pdf','VCtv_Mini_6G.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar edição
-        </button>
+
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__title-top">O jornal feito por</span>
+        <span class="hero__title-big gradient-text">você, pra VC.</span>
+      </h1>
+
+      <p class="hero__subtitle">
+        Tecnologia, ciência, espaço e cultura — toda semana, em PDF, com carinho.
+        <strong>Mesma essência. Nova era.</strong> 💜💚
+      </p>
+
+      <div class="hero__actions">
+        <a href="#editions" class="btn-cta has-ripple">Ver edições</a>
+        <button class="btn-ghost has-ripple" type="button" data-action="replay-intro">🎬 Rever apresentação</button>
+      </div>
+
+      <div class="hero__stats">
+        <div class="hero__stat glass-card-subtle">
+          <div class="hero__stat-num" id="stat-editions">0</div>
+          <div class="hero__stat-label">edições publicadas</div>
+        </div>
+        <div class="hero__stat glass-card-subtle">
+          <div class="hero__stat-num" id="stat-mini">0</div>
+          <div class="hero__stat-label">mini edições</div>
+        </div>
+        <div class="hero__stat glass-card-subtle">
+          <div class="hero__stat-num" id="stat-especial">0</div>
+          <div class="hero__stat-label">especiais</div>
+        </div>
       </div>
     </div>
-    <div class="featured-panel">
-      <img src="logo_rounded.png" alt="VCtv" style="width:90px;height:90px;border-radius:18px;"/>
-      <p class="fp-sub">Mini Edição · Tecnologia<br/>15 de abril de 2026</p>
-      <span style="font-size:.65rem;background:rgba(0,200,83,.14);color:var(--green);padding:3px 8px;border-radius:20px;border:1px solid rgba(0,200,83,.28);text-align:center">Caetano · Érico · Jaron</span>
+  </section>
+
+  <!-- 4. Featured Edition -->
+  <section id="featured" class="featured-section" aria-labelledby="featured-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="featured-heading" class="section-header__title">✨ Destaque</h2>
+        <p class="section-header__sub">A edição mais recente, primeira na vitrine.</p>
+      </header>
+      <div id="featured-edition" class="featured-card"></div>
     </div>
-  </div>
- 
-  <!-- FILTROS -->
-  <div class="section-label fade-in" style="margin-top:2.5rem">
-    <h2>Todas as edições</h2>
-    <span class="pill-muted" id="count-badge">13 edições</span>
-  </div>
-  <div class="filter-row fade-in">
-    <button class="filter-btn active" data-filter="all">Todas</button>
-    <button class="filter-btn" data-filter="semana">📰 Edição da Semana</button>
-    <button class="filter-btn" data-filter="mini">📡 Mini Edição</button>
-    <button class="filter-btn" data-filter="especial">⭐ Especial</button>
-  </div>
- 
-  <!-- GRID DE EDIÇÕES -->
-  <div class="editions-grid" id="editions-grid">
- 
-    <!-- 1 · Artemis II Completo · 14/04 -->
-    <div class="edition-card fade-in" data-type="especial">
-      <div class="card-accent" style="background:linear-gradient(90deg,#1E40AF,#3B82F6)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-space">🚀 Edição Especial · Espaço</span>
-          <span class="card-date">14 de abril de 2026</span>
-        </div>
-        <div class="card-title">Artemis II — Missão Completa</div>
-        <p class="card-desc">Cobertura completa do 1º voo tripulado lunar em 50 anos. Splashdown, recordes, 12 curiosidades, pós-missão em Houston e o futuro do programa Artemis.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌙 Artemis II</span>
-          <span class="topic-tag">🚀 NASA</span>
-          <span class="topic-tag">📸 Earthset</span>
-          <span class="topic-tag">🏊 Splashdown</span>
-        </div>
+  </section>
+
+  <!-- 5. AI Search -->
+  <section id="search" class="search-section" aria-labelledby="search-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="search-heading" class="section-header__title">🔍 Busca com VCai</h2>
+        <p class="section-header__sub">Pergunta em linguagem natural. A IA acha a edição.</p>
+      </header>
+
+      <div class="search-bar glass-card">
+        <span class="search-bar__icon" aria-hidden="true">🔍</span>
+        <input id="search-input" class="search-bar__input" type="search" placeholder="Pergunta algo tipo 'tem edição sobre IA?'" aria-label="Busca inteligente" autocomplete="off" />
+        <button id="search-ai-btn" class="search-bar__ai btn-primary has-ripple" type="button" aria-label="Buscar com VCai">✨ VCai</button>
+        <div id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Sugestões de busca"></div>
       </div>
-      <div class="card-footer">
-        <span class="card-pages">10 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_News_Edicao3_Artemis_II.pdf','VCtv_News_Edicao3_Artemis_II.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
+
+      <div class="search-tips">
+        <span class="search-tips__hint">Dica: aperte <kbd>/</kbd> pra focar na busca rapidinho.</span>
       </div>
     </div>
- 
-    <!-- 2 · Edição 3 · 11/04 -->
-    <div class="edition-card fade-in" data-type="semana">
-      <div class="card-accent" style="background:var(--green)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-weekly">📰 Edição da Semana nº 3</span>
-          <span class="card-date">11 de abril de 2026</span>
+  </section>
+
+  <!-- 6. Editions Grid -->
+  <section id="editions" class="editions-section" aria-labelledby="editions-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="editions-heading" class="section-header__title">📚 Todas as edições</h2>
+        <p class="section-header__sub">Filtre, ordene, explore. Clique num card pra ler.</p>
+      </header>
+
+      <div class="filters">
+        <div class="filters__group">
+          <span class="filters__label">Tipo</span>
+          <div id="filter-tipo" class="filters__chips"></div>
         </div>
-        <div class="card-title">VCtv News — Edição 3</div>
-        <p class="card-desc">Artemis II volta da Lua com recorde histórico. OpenAI e IA corporativa. Intel e Google na corrida por chips. Fusão nuclear com ARPA-E. Fraudes digitais. Vale do Sinos e Rio dos Sinos em São Leopoldo.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌙 Artemis II</span>
-          <span class="topic-tag">🤖 OpenAI</span>
-          <span class="topic-tag">⚛ Fusão Nuclear</span>
-          <span class="topic-tag">🏠 São Leopoldo</span>
+        <div class="filters__group">
+          <span class="filters__label">Categoria</span>
+          <div id="filter-categoria" class="filters__chips"></div>
+        </div>
+        <div class="filters__group filters__group--sort">
+          <label for="filter-sort" class="filters__label">Ordenar</label>
+          <select id="filter-sort" class="filters__select glass-pill">
+            <option value="recente">Mais recente</option>
+            <option value="antigo">Mais antiga</option>
+            <option value="titulo">Título (A-Z)</option>
+          </select>
         </div>
       </div>
-      <div class="card-footer">
-        <span class="card-pages">12 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_Edicao3_11Abril.pdf','VCtv_Edicao3_11Abril.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
+
+      <div id="editions-grid" class="editions-grid"></div>
+    </div>
+  </section>
+
+  <!-- 7. Cover Gallery -->
+  <section id="gallery" class="gallery-section" aria-labelledby="gallery-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="gallery-heading" class="section-header__title">🖼️ Galeria de capas</h2>
+        <p class="section-header__sub">Um museu virtual das edições. Cada capa renderizada na hora.</p>
+      </header>
+      <div id="gallery-grid" class="gallery-grid"></div>
+    </div>
+  </section>
+
+  <!-- 8. Favorites -->
+  <section id="favorites" class="favorites-section" aria-labelledby="favorites-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="favorites-heading" class="section-header__title">💜 Meus favoritos</h2>
+        <p class="section-header__sub">Seu arquivão pessoal. Tocou no coração, mora aqui.</p>
+      </header>
+      <div id="favorites-list" class="favorites-list"></div>
+    </div>
+  </section>
+
+  <!-- 9. Team -->
+  <section id="team" class="team-section" aria-labelledby="team-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="team-heading" class="section-header__title">🧑‍🤝‍🧑 Equipe</h2>
+        <p class="section-header__sub">Quem faz a VCtv acontecer, semana após semana.</p>
+      </header>
+      <div id="team-grid" class="team-grid"></div>
+    </div>
+  </section>
+
+  <!-- 10. About -->
+  <section id="about" class="about-section" aria-labelledby="about-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="about-heading" class="section-header__title">💚 Sobre a VCtv</h2>
+      </header>
+      <div class="about-panel glass-card-strong">
+        <p class="about-panel__lead">
+          A VCtv nasceu em 2025, na sala do 6º ano, do desejo de três amigos de fazer um jornal que fosse só deles — e, ao mesmo tempo, de todo mundo.
+        </p>
+        <p>
+          A gente escolhe pautas que nos fascinam: novas missões espaciais, o próximo salto da internet, inteligência artificial, descobertas que mudam o mundo.
+          Montamos cada edição em PDF com carinho: pesquisa, ilustração, revisão, paginação.
+        </p>
+        <p>
+          A versão <strong>VCtv TM</strong> é a nossa nova era.  Mesma essência (o jornal feito por você, pra VC), agora com um site que respira Liquid Glass, VCai 2.0 pra te ajudar a navegar e uma galeria pra reviver cada edição.
+        </p>
+        <blockquote class="about-panel__quote">
+          "Mesma essência. Nova era." 💜💚
+        </blockquote>
+        <p class="about-panel__credits">
+          Feito com carinho por <strong>Caetano</strong>, <strong>Jaron</strong> e <strong>Érico</strong>.
+        </p>
+        <div class="about-panel__actions">
+          <button class="btn-primary has-ripple" type="button" data-action="replay-intro">🎬 Rever apresentação</button>
+          <button class="btn-ghost has-ripple" type="button" data-action="show-install">📲 Instalar como app</button>
+        </div>
       </div>
     </div>
- 
-    <!-- 3 · Mini Mundo 100 anos · 13/04 -->
-    <div class="edition-card fade-in" data-type="mini">
-      <div class="card-accent" style="background:linear-gradient(90deg,#0D9488,#059669)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-sci">🌍 Mini Edição · Ciência</span>
-          <span class="card-date">13 de abril de 2026</span>
+  </section>
+
+  <!-- 11. Comments -->
+  <section id="comments" class="comments-section" aria-labelledby="comments-heading">
+    <div class="section-container">
+      <header class="section-header">
+        <h2 id="comments-heading" class="section-header__title">💬 Deixa seu recado</h2>
+        <p class="section-header__sub">Bug, ideia, elogio ou crítica — a gente lê tudo. Vai direto pro nosso canal.</p>
+      </header>
+      <form id="comment-form" class="comment-form glass-card">
+        <label for="comment-name" class="sr-only">Seu nome</label>
+        <input id="comment-name" class="comment-form__input" type="text" placeholder="Seu nome (opcional)" autocomplete="name" />
+        <label for="comment-msg" class="sr-only">Sua mensagem</label>
+        <textarea id="comment-msg" class="comment-form__textarea" rows="4" placeholder="Escreve aí o que quiser contar pra gente…" required></textarea>
+        <div class="comment-form__actions">
+          <button type="submit" class="btn-cta has-ripple">Enviar 💜💚</button>
+          <span class="comment-form__note">Você vai ser levado pro nosso canal no WhatsApp com a mensagem pronta.</span>
         </div>
-        <div class="card-title">Como Será o Mundo em 100 Anos</div>
-        <p class="card-desc">ONU, IPCC, IEA e OCDE: planeta mais velho e populoso, temperatura 1–5,7°C acima, energia mais limpa, economia mais lenta e cidades adaptadas ao clima.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌡 IPCC Clima</span>
-          <span class="topic-tag">⚡ IEA Net Zero</span>
-          <span class="topic-tag">👴 OCDE Demog.</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">4 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_Mini_Mundo100.pdf','VCtv_Mini_Mundo100.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
+      </form>
     </div>
- 
-    <!-- 4 · Artemis II Especial · 8/04 -->
-    <div class="edition-card fade-in" data-type="especial">
-      <div class="card-accent" style="background:linear-gradient(90deg,#1E3A8A,#1E40AF)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-space">🚀 Edição Especial · Espaço</span>
-          <span class="card-date">8 de abril de 2026</span>
-        </div>
-        <div class="card-title">Artemis II — Edição Especial</div>
-        <p class="card-desc">NASA lança Artemis II em 1º de abril de 2026 — 1ª missão tripulada lunar em 50 anos. Tripulação, trajetória, testes em voo, recorde de distância e retorno para Artemis III.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌙 Artemis II</span>
-          <span class="topic-tag">🚀 SLS + Orion</span>
-          <span class="topic-tag">👨‍🚀 Tripulação</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">7 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_Artemis2.pdf','VCtv_Artemis2.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 5 · Mini Internet · 7/04 -->
-    <div class="edition-card fade-in" data-type="mini">
-      <div class="card-accent" style="background:linear-gradient(90deg,#0891B2,#06B6D4)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-inet">💻 Mini Edição · Tecnologia</span>
-          <span class="card-date">7 de abril de 2026</span>
-        </div>
-        <div class="card-title">Como Funciona a Internet</div>
-        <p class="card-desc">IP, DNS, TCP, HTTP e 5G explicados do zero. A sequência completa de abrir um site, dados móveis, segurança HTTPS e o que muda a velocidade da sua conexão.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌐 IP / DNS</span>
-          <span class="topic-tag">📶 5G Core</span>
-          <span class="topic-tag">🔒 HTTPS</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">4 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_Mini_Internet.pdf','VCtv_Mini_Internet.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 6 · Edição 2 · 4/04 -->
-    <div class="edition-card fade-in" data-type="semana">
-      <div class="card-accent" style="background:var(--green)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-weekly">📰 Edição da Semana nº 2</span>
-          <span class="card-date">4 de abril de 2026</span>
-        </div>
-        <div class="card-title">VCtv News — Edição 2</div>
-        <p class="card-desc">Brasil 2026: Plano Clima, data centers, IA, e-sports, computação quântica, hidrogênio verde, saúde digital, educação, fintechs, PIX e previsão do tempo RS.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌿 Clima</span>
-          <span class="topic-tag">💻 Data Centers</span>
-          <span class="topic-tag">🎮 E-sports</span>
-          <span class="topic-tag">🏥 Saúde</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">10 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_NEWS_Edicao2.pdf','VCtv_NEWS_Edicao2.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 7 · Especial 1º Abril · 1/04 -->
-    <div class="edition-card fade-in" data-type="especial">
-      <div class="card-accent" style="background:linear-gradient(90deg,#881337,#E11D48)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-especial">🎭 Edição Especial</span>
-          <span class="card-date">1 de abril de 2026</span>
-        </div>
-        <div class="card-title">Edição Especial de 1º de Abril</div>
-        <p class="card-desc">Uma edição diferente de tudo que você já viu. Ministério do Nada, inflação em nível de paciência, data center que pede ponto e outras reportagens cuidadosamente apuradas.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🏛 Governo</span>
-          <span class="topic-tag">💸 Economia</span>
-          <span class="topic-tag">⚽ Esportes</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">5 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_Especial_1Abril2026.pdf','VCtv_Especial_1Abril2026.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 8 · Mini Computadores Biológicos · 30/03 -->
-    <div class="edition-card fade-in" data-type="mini">
-      <div class="card-accent" style="background:linear-gradient(90deg,#0D9488,#14B8A6)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-sci">🧬 Mini Edição · Ciência</span>
-          <span class="card-date">30 de março de 2026</span>
-        </div>
-        <div class="card-title">Computadores Biológicos</div>
-        <p class="card-desc">DNA executa aprendizado supervisionado in vitro. Árvores de decisão com 333 fitas. Neurônios reais integrados a hardware (CL1). Armazenamento com dezenas de exabytes por grama.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🧬 DNA Computing</span>
-          <span class="topic-tag">🧠 Wetware</span>
-          <span class="topic-tag">💾 Molecular</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">3 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('Mini_edicao_computadores_biologicos.pdf','Mini_edicao_computadores_biologicos.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 9 · Mini Câmeras · 29/03 -->
-    <div class="edition-card fade-in" data-type="mini">
-      <div class="card-accent" style="background:linear-gradient(90deg,#D97706,#F59E0B)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-foto">📷 Mini Edição · Foto</span>
-          <span class="card-date">29 de março de 2026</span>
-        </div>
-        <div class="card-title">Câmeras e Fotografia</div>
-        <p class="card-desc">Huawei Pura 80 Ultra lidera DxOMark 2025. Canon EOS R5 com vídeo 8K. Nikon Z9 com 493 pts AF. Mercado global de câmeras cresce 8,3% ao ano.</p>
-        <div class="card-topics">
-          <span class="topic-tag">📱 Smartphones</span>
-          <span class="topic-tag">📸 Câmeras Pro</span>
-          <span class="topic-tag">🇧🇷 Brasil</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">4 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('Vctv_mini_edicao_2_-_ca_meras_.pdf','VCtv_Mini_Cameras.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 10 · Mini Auto · 29/03 -->
-    <div class="edition-card fade-in" data-type="mini">
-      <div class="card-accent" style="background:linear-gradient(90deg,#E10600,#D97706)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-auto">🏎 Mini Edição · Auto</span>
-          <span class="card-date">29 de março de 2026</span>
-        </div>
-        <div class="card-title">Automobilismo</div>
-        <p class="card-desc">Antonelli vence o GP da China. Hamilton estreia no pódio pela Ferrari. Novas regras em Suzuka. Di Mauro lidera a Stock Car por 1 ponto sobre Fraga.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🏎 F1 — China</span>
-          <span class="topic-tag">🇯🇵 GP Japão</span>
-          <span class="topic-tag">🏁 Stock Car</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">3 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_MiniEdicao_Auto_29mar2026.pdf','VCtv_MiniEdicao_Auto_29mar2026.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 11 · Mini IA · 28/03 -->
-    <div class="edition-card fade-in" data-type="mini">
-      <div class="card-accent" style="background:linear-gradient(90deg,#7C3AED,#A855F7)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-tech">🤖 Mini Edição · Tech</span>
-          <span class="card-date">28 de março de 2026</span>
-        </div>
-        <div class="card-title">Inteligência Artificial</div>
-        <p class="card-desc">Mercado global de IA chega a US$376 bi em 2026. Brasil investe R$23 bi no Plano Nacional de IA. Data centers podem dobrar consumo de energia.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌍 Mercado Global</span>
-          <span class="topic-tag">📚 Educação</span>
-          <span class="topic-tag">🇧🇷 Brasil</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">3 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('Vctv_mini_1_-_AI__1_.pdf','VCtv_Mini_IA.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 12 · Edição 1 · 28/03 -->
-    <div class="edition-card fade-in" data-type="semana">
-      <div class="card-accent" style="background:var(--green)"></div>
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-badge badge-weekly">📰 Edição da Semana nº 1</span>
-          <span class="card-date">28 de março de 2026</span>
-        </div>
-        <div class="card-title">VCtv News — Edição 1</div>
-        <p class="card-desc">Plano Clima nacional, cenário global 2026, Brasil hub de data centers, First Stand 2026 de LoL no Brasil, previsão do tempo no RS e ciência de ponta.</p>
-        <div class="card-topics">
-          <span class="topic-tag">🌿 Clima</span>
-          <span class="topic-tag">💻 Tecnologia</span>
-          <span class="topic-tag">🎮 Games</span>
-          <span class="topic-tag">🔬 Ciência</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-pages">3 págs. · PDF</span>
-        <button class="btn-ver" onclick="dlPDF('VCtv_News_28mar2026_final.pdf','VCtv_News_28mar2026_final.pdf')">
-          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg>
-          Baixar
-        </button>
-      </div>
-    </div>
- 
-    <!-- 13 · Em breve -->
-    <div class="card-soon" id="card-soon" title="Próxima edição em breve!">
-      <div class="card-soon-icon">📭</div>
-      <div class="card-soon-text">Próxima edição<br/><span style="font-weight:400;font-size:.7rem">todo sábado no canal do WhatsApp</span></div>
-    </div>
- 
-  </div>
- 
-  <div class="no-results" id="no-results">Nenhuma edição encontrada com esse filtro. 🔍</div>
- 
-  <!-- WHATSAPP -->
-  <div class="wa-section fade-in" id="canal" style="margin-top:2.5rem">
-    <div class="wa-icon">📱</div>
-    <div class="wa-text">
-      <h3>Canal do WhatsApp da VCtv</h3>
-      <p>Receba cada edição direto no seu WhatsApp. <b>Todo sábado</b> tem jornal novo — é só seguir o canal. Grátis, sem spam, só informação boa.</p>
-      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:7px">
-        <a class="btn-wa" href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.558 4.124 1.534 5.856L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.9 0-3.662-.512-5.176-1.402l-.371-.22-3.762.927.975-3.649-.241-.386A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-          Seguir o canal
-        </a>
-        <span class="wa-schedule">📅 Todo sábado</span>
-      </div>
-    </div>
-  </div>
- 
-  <!-- EQUIPE -->
-  <div class="section-label fade-in" style="margin-top:2rem" id="equipe">
-    <h2>A equipe</h2>
-  </div>
-  <div class="team-strip fade-in">
-    <div class="team-avatars">
-      <div class="avatar" title="Caetano">🧑‍💻</div>
-      <div class="avatar" title="Érico">🎨</div>
-      <div class="avatar" title="Jaron">✍️</div>
-    </div>
-    <div class="team-text">
-      <h3>Feito por Caetano, Érico e Jaron</h3>
-      <p>A VCtv é feita a muitas mãos. <b>Caetano</b> pesquisa, escreve e monta as edições. <b>Jaron</b> traz conteúdo e redação. <b>Érico</b> colabora na construção semana a semana. Cada edição leva horas — tudo pra você ter o melhor jornal, de graça, todo sábado. 🗞️</p>
-    </div>
-  </div>
- 
-  <div class="about-strip fade-in" id="sobre">
-    <div class="about-icon">🗞️</div>
-    <div class="about-text">
-      <h3>O que é a VCtv?</h3>
-      <p>A VCtv é um jornal feito <b>todo sábado</b> — com notícias, curiosidades, previsão do tempo, tecnologia, ciência, espaço e muito mais. As <b>Mini Edições</b> e <b>Edições Especiais</b> saem durante a semana. Tudo caprichado, tudo de graça, direto no seu WhatsApp.</p>
-    </div>
-  </div>
- 
-  <!-- COMENTÁRIOS -->
-  <div class="comments-section fade-in" id="comentarios">
-    <div class="section-label">
-      <h2>Comentários</h2>
-      <span class="pill">Deixe o seu</span>
-    </div>
-    <div class="comment-form">
-      <h4>💬 O que você achou?</h4>
-      <div class="form-row">
-        <input type="text" id="c-name" placeholder="Seu nome" maxlength="40"/>
-        <input type="text" id="c-edition" placeholder="Edição favorita (ex: Mini 6G)" maxlength="60"/>
-      </div>
-      <textarea id="c-text" placeholder="Escreva seu comentário, sugestão ou o que quiser..." maxlength="400"></textarea>
-      <div class="form-footer">
-        <span class="form-note">💡 Comentários ficam salvos neste dispositivo</span>
-        <button class="btn-comment" onclick="submitComment()">Publicar</button>
-      </div>
-    </div>
-    <div class="comment-success" id="c-success">✅ Comentário publicado!</div>
-    <div id="comments-list"></div>
-  </div>
- 
+  </section>
+
 </main>
- 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">VC<span>tv</span></div>
-    <div class="footer-copy">© 2026 VCtv · Feito por Caetano, Érico e Jaron · Todo sábado</div>
-    <a class="footer-wa" href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.558 4.124 1.534 5.856L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.9 0-3.662-.512-5.176-1.402l-.371-.22-3.762.927.975-3.649-.241-.386A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-      Canal do WhatsApp
-    </a>
+
+<!-- 12. Footer -->
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner">
+    <div class="site-footer__col">
+      <div class="site-footer__logo gradient-text">VCtv<sup>TM</sup></div>
+      <p class="site-footer__tagline">O jornal feito por você, pra VC. 💜💚</p>
+      <p class="site-footer__motto">Mesma essência. Nova era.</p>
+    </div>
+    <div class="site-footer__col">
+      <h3 class="site-footer__title">Navegar</h3>
+      <a href="#editions" class="site-footer__link">Edições</a>
+      <a href="#gallery" class="site-footer__link">Galeria</a>
+      <a href="#favorites" class="site-footer__link">Favoritos</a>
+      <a href="#about" class="site-footer__link">Sobre</a>
+    </div>
+    <div class="site-footer__col">
+      <h3 class="site-footer__title">Comunidade</h3>
+      <a href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" class="site-footer__link" target="_blank" rel="noopener">Canal no WhatsApp</a>
+      <a href="#comments" class="site-footer__link">Deixar recado</a>
+      <button class="site-footer__link site-footer__link--btn" type="button" data-action="replay-intro">Rever apresentação</button>
+    </div>
+    <div class="site-footer__col">
+      <h3 class="site-footer__title">Equipe</h3>
+      <span class="site-footer__link">Caetano</span>
+      <span class="site-footer__link">Jaron</span>
+      <span class="site-footer__link">Érico</span>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <span>© <span id="footer-year">2026</span> VCtv TM — feito com 💜💚 por Caetano, Jaron e Érico.</span>
+    <span class="site-footer__version">v1.0.0 · Liquid Glass Edition</span>
   </div>
 </footer>
- 
-<!-- NOTIFICAÇÕES MODAL -->
-<div class="notif-overlay" id="notif-overlay" onclick="if(event.target===this)closeNotif()">
-  <div class="notif-box">
-    <h3>🔔 Receber novidades</h3>
-    <p>Escolha como quer saber quando sair uma edição nova da VCtv:</p>
-    <div class="notif-options">
-      <a class="notif-opt" href="https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17" target="_blank" rel="noopener">
-        <div class="notif-opt-icon">📱</div>
-        <div class="notif-opt-text">
-          <strong>Canal do WhatsApp</strong>
-          <span>Receba cada edição direto no app — todo sábado</span>
-        </div>
-      </a>
-      <div class="notif-opt" onclick="shareLink()">
-        <div class="notif-opt-icon">🔗</div>
-        <div class="notif-opt-text">
-          <strong>Compartilhar o site</strong>
-          <span>Manda o link do VCtv pra um amigo</span>
-        </div>
-      </div>
-    </div>
-    <button class="notif-close" onclick="closeNotif()">Fechar</button>
-  </div>
-</div>
- 
-<!-- VCAI -->
-<button id="ai-btn" onclick="toggleAI()" title="VCai — IA da VCtv">VC</button>
-<div id="ai-panel">
-  <div class="ai-header">
-    <div class="ai-header-icon">✦</div>
-    <div class="ai-header-text">
-      <h4>VCai</h4>
-      <p>A inteligência artificial da VCtv</p>
-    </div>
-    <span class="ai-badge">GRÁTIS</span>
-    <button class="ai-close" onclick="toggleAI()">✕</button>
-  </div>
-  <div class="ai-messages" id="ai-messages">
-    <div class="msg bot">Oi! Sou o VCai 🗞️ Pergunte sobre qualquer edição, notícia ou assunto do jornal!</div>
-  </div>
-  <div class="ai-input-area">
-    <textarea id="ai-input" rows="1" placeholder="Pergunte algo sobre a VCtv..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button id="ai-send" onclick="sendMessage()">
-      <svg viewBox="0 0 16 16"><path d="M2 14l12-6L2 2v4.5l8 1.5-8 1.5V14z"/></svg>
-    </button>
-  </div>
-</div>
- 
-<!-- EASTER EGG TOAST -->
-<div id="ee-toast"></div>
-<!-- KONAMI OVERLAY -->
-<div id="konami-overlay">
-  <h2>🎉 CÓDIGO SECRETO!</h2>
-  <p>Você descobriu o easter egg da VCtv.<br/>Parabéns — você tem talento (e tempo livre) 😄</p>
-  <p style="color:var(--green);font-weight:600;margin-top:.5rem">↑ ↑ ↓ ↓ ← → ← → B A</p>
-  <button onclick="document.getElementById('konami-overlay').classList.remove('show')">Fechar</button>
-</div>
- 
-<script>
-/* ══════════════════════════════════════
-   DOWNLOADS — garante download direto
-══════════════════════════════════════ */
-async function dlPDF(filename, saveAs) {
-  const btn = event.currentTarget;
-  btn.disabled = true;
-  btn.textContent = 'Baixando...';
-  try {
-    const res = await fetch(filename);
-    if (!res.ok) throw new Error('not found');
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = saveAs || filename;
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-    showToast('✅ Download iniciado!', 2500);
-  } catch {
-    window.open(filename, '_blank');
-    showToast('📄 Abrindo PDF em nova aba...', 2500);
-  }
-  setTimeout(() => {
-    btn.disabled = false;
-    btn.innerHTML = '<svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 12l-4-4h2.5V3h3v5H12L8 12zm-5 2h10v-1.5H3V14z"/></svg> Baixar';
-  }, 2000);
-}
- 
-/* ══════════════════════════════════════
-   FILTROS
-══════════════════════════════════════ */
-const filterBtns = document.querySelectorAll('.filter-btn');
-const cards = document.querySelectorAll('.edition-card');
-const noResults = document.getElementById('no-results');
-const countBadge = document.getElementById('count-badge');
- 
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const f = btn.dataset.filter;
-    let visible = 0;
-    cards.forEach(c => {
-      const match = f === 'all' || c.dataset.type === f;
-      c.classList.toggle('hidden', !match);
-      if (match) visible++;
-    });
-    noResults.classList.toggle('show', visible === 0);
-    countBadge.textContent = visible + ' edição' + (visible !== 1 ? 'ões' : '');
-  });
-});
- 
-/* ══════════════════════════════════════
-   COMENTÁRIOS — localStorage
-══════════════════════════════════════ */
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
- 
-function renderComments() {
-  const list = document.getElementById('comments-list');
-  const data = JSON.parse(localStorage.getItem('vctv_comments_v2') || '[]');
-  if (!data.length) {
-    list.innerHTML = '<div class="no-comments">Nenhum comentário ainda — seja o primeiro! 🗞️</div>';
-    return;
-  }
-  list.innerHTML = [...data].reverse().map(c => `
-    <div class="comment-item">
-      <div class="comment-header">
-        <div class="comment-avatar">${esc(c.name[0].toUpperCase())}</div>
-        <span class="comment-name">${esc(c.name)}</span>
-        ${c.edition ? `<span class="topic-tag" style="font-size:.63rem">📰 ${esc(c.edition)}</span>` : ''}
-        <span class="comment-date">${esc(c.date)}</span>
-      </div>
-      <div class="comment-text">${esc(c.text)}</div>
-    </div>`).join('');
-}
- 
-function submitComment() {
-  const name    = document.getElementById('c-name').value.trim();
-  const edition = document.getElementById('c-edition').value.trim();
-  const text    = document.getElementById('c-text').value.trim();
-  if (!name || !text) { showToast('⚠️ Preencha nome e comentário!', 3000); return; }
-  const data = JSON.parse(localStorage.getItem('vctv_comments_v2') || '[]');
-  data.push({
-    name, edition, text,
-    date: new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'})
-  });
-  localStorage.setItem('vctv_comments_v2', JSON.stringify(data));
-  document.getElementById('c-name').value = '';
-  document.getElementById('c-edition').value = '';
-  document.getElementById('c-text').value = '';
-  renderComments();
-  const s = document.getElementById('c-success');
-  s.classList.add('show');
-  setTimeout(() => s.classList.remove('show'), 3000);
-}
- 
-renderComments();
- 
-/* ══════════════════════════════════════
-   NOTIFICAÇÕES
-══════════════════════════════════════ */
-function openNotif(){ document.getElementById('notif-overlay').classList.add('open') }
-function closeNotif(){ document.getElementById('notif-overlay').classList.remove('open') }
-function shareLink(){
-  const url = window.location.href;
-  if (navigator.share) {
-    navigator.share({title:'VCtv News',text:'O jornal feito por você, pra VC!',url});
-  } else {
-    navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copiado!', 2500));
-  }
-  closeNotif();
-}
- 
-/* ══════════════════════════════════════
-   VCAI
-══════════════════════════════════════ */
-const SYSTEM=`Você é o VCai, a IA da VCtv — jornal brasileiro feito por Caetano, Érico e Jaron, todo sábado no WhatsApp.
- 
-EDIÇÕES (mais recente primeiro):
-• Mini 6G (15/04/2026): ITU IMT-2030, 3GPP Release 20, IA/ML na rede, FCC espectro, lançamento 2030+
-• Esp. Artemis II completa (14/04/2026): splashdown 10/abr, 12 curiosidades, pós-missão Houston, Artemis III 2027
-• Edição 3 (11/04/2026, Jaron): Artemis II recorde, OpenAI agentes, Intel+Google chips, ARPA-E fusão $135mi, fraudes deepfake, Vale do Sinos, Rio dos Sinos
-• Mini Mundo 100 anos (13/04/2026): ONU demografia, IPCC 1-5,7°C, IEA Net Zero, OCDE 1,3% PIB/ano
-• Esp. Artemis II (08/04/2026): lançamento 1/abr, tripulação, testes, recorde 248.655mi, retorno
-• Mini Internet (07/04/2026): IP RFC791, DNS, TCP, HTTP, sequência abrir site, 5G Core, HTTPS
-• Edição 2 (04/04/2026, Jaron): Plano Clima, data centers 48%AL, IA investimentos, e-sports First Stand, computação quântica, H2 verde, TabNet, fintechs, PIX
-• Esp. 1º Abril (01/04/2026): humor — Ministério do Nada, inflação em paciência, data center pedindo ponto
-• Mini Computadores Biológicos (30/03): DNA 333 fitas, CL1 neurônios, exabytes/grama
-• Mini Câmeras (29/03): Huawei Pura 80 Ultra 1º DxO, S25 Ultra 200MP, Canon R5 8K, Nikon Z9
-• Mini Auto (29/03): Antonelli GP China, Hamilton Ferrari, Bahrein cancelado, Di Mauro Stock Car
-• Mini IA (28/03): US$376bi mercado, PBIA R$23bi, IA educação, energia data centers
-• Edição 1 (28/03): Plano Clima 2035, J.P.Morgan 2026, First Stand LoL, hidrogênio verde, tempo RS
- 
-EQUIPE: Caetano (criador/montagem), Jaron (redação/edições), Érico (colaborador)
-CANAL: https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17
- 
-Responda em português brasileiro, amigável, jovem e direto. Máx 3 parágrafos.`;
- 
-let aiMsgs=[],aiLoading=false;
- 
-function toggleAI(){
-  const p=document.getElementById('ai-panel'),b=document.getElementById('ai-btn');
-  p.classList.toggle('open');b.classList.toggle('open');
-  b.textContent=p.classList.contains('open')?'✕':'VC';
-  if(p.classList.contains('open'))setTimeout(()=>document.getElementById('ai-input').focus(),150);
-}
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,82)+'px';}
-function addMsg(role,text){
-  const d=document.createElement('div');
-  d.className='msg '+(role==='user'?'user':'bot');
-  d.textContent=text;
-  const c=document.getElementById('ai-messages');
-  c.appendChild(d);c.scrollTop=c.scrollHeight;return d;
-}
-async function sendMessage(){
-  const inp=document.getElementById('ai-input');
-  const txt=inp.value.trim();
-  if(!txt||aiLoading)return;
-  inp.value='';inp.style.height='auto';
-  aiLoading=true;document.getElementById('ai-send').disabled=true;
-  addMsg('user',txt);aiMsgs.push({role:'user',content:txt});
-  const t=addMsg('bot','pensando...');t.classList.add('typing');
-  try{
-    const hist=aiMsgs.slice(0,-1).map(m=>`${m.role==='user'?'Usuário':'VCai'}: ${m.content}`).join('\n');
-    const prompt=`${SYSTEM}\n\n${hist}\nUsuário: ${txt}\nVCai:`;
-    const res=await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-    const reply=res.ok?(await res.text()).trim()||'Não entendi. Tenta de novo!':'Serviço indisponível agora.';
-    t.classList.remove('typing');t.textContent=reply;
-    aiMsgs.push({role:'assistant',content:reply});
-  }catch{t.classList.remove('typing');t.textContent='Erro de conexão. Verifica a internet!';}
-  aiLoading=false;document.getElementById('ai-send').disabled=false;
-  document.getElementById('ai-messages').scrollTop=99999;
-}
- 
-/* ══════════════════════════════════════
-   SCROLL ANIMATIONS
-══════════════════════════════════════ */
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
-},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.fade-in').forEach((el,i)=>{
-  el.style.transitionDelay=(i%4)*0.07+'s';
-  observer.observe(el);
-});
- 
-/* ══════════════════════════════════════
-   COUNTER ANIMATION
-══════════════════════════════════════ */
-function animateCounter(el){
-  const target=+el.dataset.target;
-  let n=0;
-  const step=Math.ceil(target/20);
-  const t=setInterval(()=>{
-    n=Math.min(n+step,target);
-    el.textContent=n;
-    if(n>=target)clearInterval(t);
-  },60);
-}
-const counterObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      animateCounter(e.target);
-      counterObs.unobserve(e.target);
-    }
-  });
-},{threshold:.5});
-document.querySelectorAll('[data-target]').forEach(el=>counterObs.observe(el));
- 
-/* ══════════════════════════════════════
-   EASTER EGGS
-══════════════════════════════════════ */
-function showToast(msg,dur=3000){
-  const t=document.getElementById('ee-toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
-}
- 
-// 🥚 1 — Logo clicada 5x
-let lc=0,lt;
-document.getElementById('logo-click').addEventListener('click',e=>{
-  e.preventDefault();lc++;clearTimeout(lt);
-  lt=setTimeout(()=>lc=0,1200);
-  if(lc>=5){
-    lc=0;
-    const img=document.getElementById('logo-img');
-    img.style.transition='transform .7s';
-    img.style.transform='rotate(720deg) scale(1.2)';
-    setTimeout(()=>img.style.transform='',800);
-    showToast('🌀 A logo girou igual a cabeça da gente fazendo o jornal!',4000);
-  }
-});
- 
-// 🥚 2 — Konami Code
-const konami=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let ki=0;
-document.addEventListener('keydown',e=>{
-  if(e.key===konami[ki]){ki++;if(ki===konami.length){ki=0;document.getElementById('konami-overlay').classList.add('show');}}
-  else ki=0;
-});
- 
-// 🥚 3 — Card "em breve"
-document.getElementById('card-soon').addEventListener('click',()=>{
-  const msgs=['🤫 Próxima edição: em breve. Vem coisa boa!','👀 Você achou o card secreto. Bom trabalho!','📰 Spoiler: vai ter muito conteúdo top por aí!','🎯 Investigador nato! Próxima edição em breve.'];
-  showToast(msgs[Math.floor(Math.random()*msgs.length)],3500);
-});
- 
-// 🥚 4 — Digitar "vctv" no teclado
-let typed='';
-document.addEventListener('keypress',e=>{
-  typed+=e.key.toLowerCase();if(typed.length>4)typed=typed.slice(-4);
-  if(typed==='vctv'){
-    typed='';
-    const emojis=['🗞️','📰','✨','🎉','📱','✦','🟢','🚀','🌙'];
-    for(let i=0;i<14;i++)setTimeout(()=>{
-      const d=document.createElement('div');
-      d.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-      d.style.cssText=`position:fixed;font-size:1.4rem;left:${Math.random()*90+5}vw;top:-2rem;z-index:997;pointer-events:none;transition:top 2s ease,opacity 1.5s ease`;
-      document.body.appendChild(d);
-      requestAnimationFrame(()=>{d.style.top=`${Math.random()*60+20}vh`;d.style.opacity='0';});
-      setTimeout(()=>d.remove(),2500);
-    },i*70);
-    showToast('🎉 VCtv! Você é um dos nossos! 😄',3000);
-  }
-});
- 
-// 🥚 5 — VCai clicado 3x rápido
-let vc=0,vt;
-document.getElementById('ai-btn').addEventListener('click',()=>{
-  vc++;clearTimeout(vt);vt=setTimeout(()=>vc=0,800);
-  if(vc>=3){
-    vc=0;
-    const panel=document.getElementById('ai-panel');
-    if(!panel.classList.contains('open')){panel.classList.add('open');document.getElementById('ai-btn').classList.add('open');document.getElementById('ai-btn').textContent='✕';}
-    const d=document.createElement('div');d.className='msg bot';
-    d.textContent='Ei! Três cliques seguidos... tá empolgado com o VCai? 😄 Pode perguntar!';
-    const c=document.getElementById('ai-messages');c.appendChild(d);c.scrollTop=c.scrollHeight;
-  }
-});
-</script>
+
+<!-- 13. Scroll top -->
+<button id="scroll-top" class="scroll-top glass-circle" type="button" aria-label="Voltar ao topo">↑</button>
+
+<!-- Scripts -->
+<script src="./scripts/utils.js"></script>
+<script src="./scripts/data.js"></script>
+<script src="./scripts/theme.js"></script>
+<script src="./scripts/favorites.js"></script>
+<script src="./scripts/render.js"></script>
+<script src="./scripts/search.js"></script>
+<script src="./scripts/gallery.js"></script>
+<script src="./scripts/pdf-reader.js"></script>
+<script src="./scripts/vcai.js"></script>
+<script src="./scripts/countdown.js"></script>
+<script src="./scripts/glass.js"></script>
+<script src="./scripts/pwa.js"></script>
+<script src="./scripts/intro.js"></script>
+<script src="./scripts/main.js"></script>
+
 </body>
 </html>
