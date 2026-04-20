@@ -1,0 +1,471 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — vcai.css
+   Estilização completa do VCai 2.0: FAB flutuante, painel lateral
+   Liquid Glass, bolhas de conversa (usuário verde / IA roxa),
+   input com botão de enviar.  Mobile: painel fullscreen.
+   =========================================================== */
+
+/* ─── FAB (BOTÃO FLUTUANTE) ──────────────────────────────── */
+#vcai-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 400;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid transparent;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  transition:
+    transform var(--dur-base) var(--ease-out-back),
+    background var(--dur-base) var(--ease-standard);
+  letter-spacing: -0.03em;
+}
+
+/* Aura roxo → verde */
+#vcai-fab::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  filter: blur(16px);
+  opacity: 0.55;
+  z-index: -1;
+  animation: vcai-fab-pulse 3s var(--ease-in-out) infinite;
+}
+
+/* Borda gradient */
+#vcai-fab::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes vcai-fab-pulse {
+  0%, 100% { opacity: 0.45; filter: blur(14px); }
+  50%      { opacity: 0.75; filter: blur(20px); }
+}
+
+#vcai-fab:hover { transform: scale(1.08); }
+#vcai-fab:active { transform: scale(0.95); }
+
+#vcai-fab.is-open {
+  background: var(--grad-main);
+  color: #0a0812;
+}
+
+#vcai-fab__label {
+  background: var(--grad-main);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transition: color var(--dur-fast);
+}
+
+#vcai-fab.is-open #vcai-fab__label {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #0a0812;
+}
+
+/* Badge de nova mensagem */
+#vcai-fab__badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--red);
+  border: 2px solid var(--bg-black);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+  -webkit-text-fill-color: white;
+}
+
+#vcai-fab__badge.is-visible { display: inline-flex; }
+
+/* ─── PAINEL LATERAL ─────────────────────────────────────── */
+#vcai-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  z-index: 400;
+  width: 400px;
+  max-width: calc(100vw - 48px);
+  height: 620px;
+  max-height: calc(100vh - 140px);
+  border-radius: var(--r-xl);
+  background: rgba(10, 8, 18, 0.85);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid transparent;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform-origin: bottom right;
+  animation: vcai-panel-in var(--dur-slow) var(--ease-out-smooth);
+}
+
+#vcai-panel.is-open { display: flex; }
+
+/* Aura do painel */
+#vcai-panel::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  filter: blur(24px);
+  opacity: 0.3;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#vcai-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes vcai-panel-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* ─── HEADER DO PAINEL ───────────────────────────────────── */
+.vcai-header {
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(160,80,240,0.08), transparent);
+}
+
+/* Slot reservado pro mascote (por enquanto logo genérico) */
+.vcai-header__mascot {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--grad-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1rem;
+  color: #0a0812;
+  flex-shrink: 0;
+  position: relative;
+  isolation: isolate;
+  box-shadow: 0 4px 16px rgba(160, 80, 240, 0.4);
+}
+
+.vcai-header__mascot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  filter: blur(10px);
+  opacity: 0.6;
+  z-index: -1;
+  animation: pulse-opacity 3s var(--ease-in-out) infinite;
+}
+
+.vcai-header__body { flex: 1; min-width: 0; }
+
+.vcai-header__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  letter-spacing: var(--ls-snug);
+}
+
+.vcai-header__subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vcai-header__subtitle::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-scale 2s var(--ease-in-out) infinite;
+  box-shadow: 0 0 6px var(--green);
+}
+
+.vcai-header__actions {
+  display: flex;
+  gap: 4px;
+}
+
+.vcai-header__btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color var(--dur-fast), background var(--dur-fast);
+}
+
+.vcai-header__btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+.vcai-header__btn svg { width: 16px; height: 16px; }
+
+/* ─── ÁREA DE MENSAGENS ──────────────────────────────────── */
+.vcai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  scroll-behavior: smooth;
+  position: relative;
+  z-index: 2;
+}
+
+.vcai-messages::-webkit-scrollbar { width: 4px; }
+.vcai-messages::-webkit-scrollbar-thumb { background: var(--border-regular); border-radius: var(--r-full); border: none; }
+
+/* Bolha de mensagem base */
+.vcai-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: var(--r-lg);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  word-wrap: break-word;
+  animation: fade-in-up var(--dur-base) var(--ease-out-smooth);
+  position: relative;
+}
+
+/* Mensagem do usuário — verde sutil */
+.vcai-msg--user {
+  align-self: flex-end;
+  background: var(--green-subtle);
+  color: var(--text-primary);
+  border-bottom-right-radius: 4px;
+  border: 1px solid rgba(0, 230, 110, 0.2);
+}
+
+/* Mensagem da IA — roxa sutil */
+.vcai-msg--bot {
+  align-self: flex-start;
+  background: var(--purple-subtle);
+  color: var(--text-primary);
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(160, 80, 240, 0.2);
+}
+
+.vcai-msg--loading {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.vcai-msg__time {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* Chips de sugestões rápidas */
+.vcai-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 var(--sp-4) var(--sp-3);
+}
+
+.vcai-suggestion {
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--dur-fast);
+}
+
+.vcai-suggestion:hover {
+  background: var(--purple-subtle);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+/* ─── INPUT AREA ─────────────────────────────────────────── */
+.vcai-input-area {
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(0deg, rgba(0, 230, 110, 0.04), transparent);
+}
+
+.vcai-input-wrap {
+  flex: 1;
+  position: relative;
+  padding: 8px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+
+.vcai-input-wrap:focus-within {
+  border-color: transparent;
+}
+
+.vcai-input-wrap:focus-within::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.vcai-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  resize: none;
+  max-height: 100px;
+  padding: 0;
+}
+
+.vcai-input::placeholder { color: var(--text-placeholder); }
+
+.vcai-send {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--grad-main);
+  color: #0a0812;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    transform var(--dur-fast) var(--ease-out-back),
+    filter var(--dur-fast) var(--ease-standard);
+  position: relative;
+  isolation: isolate;
+}
+
+.vcai-send::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  filter: blur(10px);
+  opacity: 0.4;
+  z-index: -1;
+}
+
+.vcai-send:hover { transform: scale(1.08); filter: brightness(1.1); }
+.vcai-send:active { transform: scale(0.92); }
+
+.vcai-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.vcai-send svg { width: 16px; height: 16px; }
+
+/* Footer / disclaimer */
+.vcai-footer {
+  padding: 6px var(--sp-4);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-align: center;
+  border-top: 1px solid var(--border-subtle);
+  position: relative;
+  z-index: 2;
+}
+
+/* Typing indicator dentro da bolha */
+.vcai-typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.vcai-typing span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--purple);
+  animation: dot-bounce 1s var(--ease-in-out) infinite;
+}
+
+.vcai-typing span:nth-child(2) { animation-delay: 0.15s; background: linear-gradient(135deg, var(--purple), var(--green)); }
+.vcai-typing span:nth-child(3) { animation-delay: 0.30s; background: var(--green); }

@@ -1,0 +1,771 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — liquid-glass.css
+   ───────────────────────────────────────────────────────────────
+   Sistema Liquid Glass central da VCtv. Implementa as 7 camadas
+   especificadas (aura, vidro, borda gradient, highlight, sombras,
+   noise) e as variações (.glass-card, .glass-card-strong,
+   .glass-card-subtle, .glass-pill, .glass-panel).
+   Toda a estética do site é construída em cima destas classes.
+   =========================================================== */
+
+/* ═══════════════════════════════════════════════════════════════
+   1. BASE — .glass-card
+   Padrão medio: aura sutil/média, borda gradient roxo→verde,
+   highlight superior, noise sutil, sombras.
+   =========================================================== */
+
+.glass-card {
+  position: relative;
+  background: var(--bg-surface);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border-radius: var(--r-xl);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: var(--shadow-glass);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--dur-slow) var(--ease-out-smooth),
+    box-shadow var(--dur-slow) var(--ease-out-smooth),
+    border-color var(--dur-slow) var(--ease-standard);
+  color: var(--text-primary);
+}
+
+/* Aura externa roxo → verde — camada 1 */
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: var(--grad-main);
+  border-radius: inherit;
+  filter: blur(14px);
+  opacity: 0.35;
+  transition:
+    opacity var(--dur-slow) var(--ease-out-smooth),
+    filter var(--dur-slow) var(--ease-out-smooth);
+  pointer-events: none;
+}
+
+/* Borda gradient roxo → verde — camada 3
+   Implementada via mask-composite: a borda "apenas" é renderizada
+   na extremidade, preservando o fundo de vidro interno. */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-glass-px);
+  background: var(--grad-main);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Highlight interno superior — camada 4.  Implementado via
+   um span .glass-highlight dentro do card (ver .glass-highlight
+   abaixo). Alguns cards também usam este pseudo extra: */
+.glass-card .glass-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* Textura grafite — camada 7.  Imagem SVG em mix-blend-mode. */
+.glass-card > .glass-noise,
+.glass-card::after.glass-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/noise.svg');
+  background-repeat: repeat;
+  background-size: 200px;
+  mix-blend-mode: overlay;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-card > .glass-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url('../assets/noise.svg');
+  background-repeat: repeat;
+  background-size: 200px;
+  mix-blend-mode: overlay;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Light-mode: textura muda de blend */
+html[data-theme='light'] .glass-card > .glass-noise {
+  mix-blend-mode: multiply;
+  opacity: 0.025;
+}
+
+/* ─── HOVER / ACTIVE ──────────────────────────────────────── */
+
+.glass-card:hover {
+  transform: translateY(-3px);
+}
+
+.glass-card:hover::before {
+  opacity: 0.55;
+  filter: blur(18px);
+}
+
+.glass-card:active {
+  transform: translateY(-1px) scale(0.985);
+}
+
+.glass-card:active::before {
+  opacity: 0.85;
+  filter: blur(20px);
+}
+
+/* Apenas quando o card é um botão/link tem pointer */
+.glass-card[role='button'],
+a.glass-card,
+button.glass-card {
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. .glass-card-strong — aura mais intensa
+   Para destaques: última edição, modal principal.
+   =========================================================== */
+
+.glass-card-strong {
+  position: relative;
+  background: var(--bg-surface-2);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-radius: var(--r-2xl);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 60px rgba(160, 80, 240, 0.1);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--dur-slow) var(--ease-out-smooth),
+    box-shadow var(--dur-slow) var(--ease-out-smooth);
+  color: var(--text-primary);
+}
+
+.glass-card-strong::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+  background: var(--grad-main);
+  border-radius: inherit;
+  filter: blur(24px);
+  opacity: 0.55;
+  transition:
+    opacity var(--dur-slow) var(--ease-out-smooth),
+    filter var(--dur-slow) var(--ease-out-smooth);
+  animation: aura-pulse 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.glass-card-strong::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: var(--grad-main);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass-card-strong > .glass-highlight {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.glass-card-strong:hover {
+  transform: translateY(-4px);
+}
+.glass-card-strong:hover::before {
+  opacity: 0.75;
+  filter: blur(30px);
+}
+
+@keyframes aura-pulse {
+  0%, 100% { opacity: 0.50; filter: blur(24px); }
+  50%      { opacity: 0.70; filter: blur(30px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. .glass-card-subtle — aura sutil
+   Para elementos secundários: barra de busca, filtros.
+   =========================================================== */
+
+.glass-card-subtle {
+  position: relative;
+  background: var(--bg-surface);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--dur-base) var(--ease-out-smooth),
+    border-color var(--dur-base) var(--ease-standard),
+    box-shadow var(--dur-base) var(--ease-standard);
+  color: var(--text-primary);
+}
+
+.glass-card-subtle::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: var(--grad-main);
+  border-radius: inherit;
+  filter: blur(8px);
+  opacity: 0.15;
+  transition: opacity var(--dur-base) var(--ease-standard);
+  pointer-events: none;
+}
+
+.glass-card-subtle:hover {
+  border-color: transparent;
+}
+.glass-card-subtle:hover::before {
+  opacity: 0.35;
+  filter: blur(10px);
+}
+.glass-card-subtle:focus-within::before {
+  opacity: 0.5;
+  filter: blur(12px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   4. .glass-pill — versão compacta para botões/tags
+   =========================================================== */
+
+.glass-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 8px 16px;
+  background: var(--bg-surface);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border-radius: var(--r-full);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  isolation: isolate;
+  transition:
+    transform var(--dur-fast) var(--ease-out-back),
+    color var(--dur-fast) var(--ease-standard);
+  user-select: none;
+}
+
+.glass-pill::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: var(--grad-main);
+  border-radius: inherit;
+  filter: blur(6px);
+  opacity: 0.25;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.glass-pill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--grad-main);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass-pill:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+.glass-pill:hover::before {
+  opacity: 0.55;
+}
+.glass-pill:active {
+  transform: translateY(0) scale(0.97);
+}
+.glass-pill:active::before {
+  opacity: 0.8;
+}
+
+/* Variação forte: aura grande, boa pra CTAs primários */
+.glass-pill-strong {
+  padding: 10px 22px;
+  font-size: var(--fs-base);
+  font-weight: 600;
+}
+.glass-pill-strong::before {
+  opacity: 0.55;
+  filter: blur(10px);
+}
+.glass-pill-strong:hover::before {
+  opacity: 0.8;
+  filter: blur(14px);
+}
+
+/* Pill com preenchimento gradient sólido (CTA) */
+.glass-pill-filled {
+  background: var(--grad-main);
+  color: #0a0812;
+  font-weight: 700;
+  border: none;
+}
+
+.glass-pill-filled::after {
+  display: none;
+}
+
+.glass-pill-filled::before {
+  opacity: 0.5;
+  filter: blur(12px);
+}
+
+.glass-pill-filled:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. .glass-panel — grandes superfícies, sem sombra dramática
+   =========================================================== */
+
+.glass-panel {
+  position: relative;
+  background: var(--bg-surface);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border-radius: var(--r-xl);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px -6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--text-primary);
+}
+
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: var(--grad-main);
+  border-radius: inherit;
+  filter: blur(16px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--grad-main);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. .glass-circle — círculo glass (para ícones/avatares)
+   =========================================================== */
+
+.glass-circle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  isolation: isolate;
+  transition:
+    transform var(--dur-fast) var(--ease-out-back),
+    background var(--dur-fast) var(--ease-standard);
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.glass-circle::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: var(--grad-main);
+  border-radius: inherit;
+  filter: blur(8px);
+  opacity: 0.25;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.glass-circle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: var(--grad-main);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass-circle:hover {
+  transform: scale(1.08);
+}
+.glass-circle:hover::before {
+  opacity: 0.55;
+}
+.glass-circle:active {
+  transform: scale(0.95);
+}
+
+.glass-circle-lg {
+  width: 64px;
+  height: 64px;
+}
+.glass-circle-xl {
+  width: 96px;
+  height: 96px;
+}
+.glass-circle-sm {
+  width: 32px;
+  height: 32px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. FALLBACK — sem suporte a backdrop-filter
+   Mantém o visual agradável em navegadores antigos.
+   =========================================================== */
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-card,
+  .glass-card-strong,
+  .glass-card-subtle,
+  .glass-pill,
+  .glass-panel,
+  .glass-circle {
+    background: rgba(20, 15, 30, 0.85);
+  }
+  html[data-theme='light'] .glass-card,
+  html[data-theme='light'] .glass-card-strong,
+  html[data-theme='light'] .glass-card-subtle,
+  html[data-theme='light'] .glass-pill,
+  html[data-theme='light'] .glass-panel,
+  html[data-theme='light'] .glass-circle {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. VARIAÇÕES DE COR DA AURA
+   Algumas cards (ex.: edições especiais) podem querer uma aura
+   específica em tom puro roxo ou verde.
+   =========================================================== */
+
+.glass-aura-purple::before {
+  background: linear-gradient(135deg, #c080ff 0%, #7837c8 100%);
+}
+.glass-aura-green::before {
+  background: linear-gradient(135deg, #6ef0a0 0%, #00af55 100%);
+}
+.glass-aura-mix::before {
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #a050f0 0deg,
+    #00e66e 120deg,
+    #a050f0 240deg,
+    #00e66e 360deg
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. HELPERS DE LAYOUT INTERNO DOS CARDS
+   =========================================================== */
+
+.glass-card-content {
+  position: relative;
+  z-index: 3;
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.glass-card-strong > .glass-card-content {
+  padding: var(--sp-6);
+}
+
+.glass-card-header {
+  position: relative;
+  z-index: 3;
+  padding: var(--sp-4) var(--sp-5) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.glass-card-footer {
+  position: relative;
+  z-index: 3;
+  padding: var(--sp-3) var(--sp-5);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. MODIFIER — REACTIVE (para cards que reagem ao cursor)
+   Junto com o JS em glass.js, o card recebe --mx e --my vars
+   para deslocar a aura de acordo com a posição do cursor.
+   =========================================================== */
+
+.glass-card.is-reactive::before {
+  background:
+    radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(160, 80, 240, 0.7) 0%,
+      rgba(0, 230, 110, 0.5) 40%,
+      transparent 70%
+    );
+  transition:
+    opacity var(--dur-slow) var(--ease-out-smooth),
+    background var(--dur-base) var(--ease-standard);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. MODIFIER — FLOATING (usado em FABs, menus, toasts)
+   =========================================================== */
+
+.glass-floating {
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.9),
+    0 10px 30px -10px rgba(160, 80, 240, 0.4),
+    0 10px 30px -10px rgba(0, 230, 110, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   12. MODIFIER — INTERACTIVE (cursor resposta mais exagerada)
+   =========================================================== */
+
+.glass-interactive {
+  cursor: pointer;
+  will-change: transform;
+}
+
+.glass-interactive:hover {
+  transform: translateY(-5px) scale(1.015);
+}
+
+.glass-interactive:active {
+  transform: translateY(-1px) scale(0.99);
+  transition-duration: var(--dur-fast);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   13. DISABLED STATE
+   =========================================================== */
+
+.glass-card[aria-disabled='true'],
+.glass-pill[aria-disabled='true'],
+.glass-circle[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   14. OUTLINE VARIANT — sem fundo, só borda gradient
+   =========================================================== */
+
+.glass-outline {
+  position: relative;
+  background: transparent;
+  backdrop-filter: none;
+  border: 1px solid transparent;
+  border-radius: var(--r-lg);
+  isolation: isolate;
+  color: var(--text-primary);
+  transition:
+    background var(--dur-base) var(--ease-standard),
+    transform var(--dur-base) var(--ease-out-smooth);
+}
+
+.glass-outline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: var(--grad-main);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.glass-outline:hover {
+  background: var(--bg-surface);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   15. FRAMES DECORATIVOS — ricas auras, não clicáveis
+   =========================================================== */
+
+.glass-frame {
+  position: relative;
+  pointer-events: none;
+  border-radius: inherit;
+  isolation: isolate;
+}
+
+.glass-frame::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: var(--grad-main);
+  filter: blur(28px);
+  opacity: 0.25;
+  z-index: -1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   16. FINAL — ajustes para o modo light
+   =========================================================== */
+
+html[data-theme='light'] .glass-card,
+html[data-theme='light'] .glass-card-strong,
+html[data-theme='light'] .glass-card-subtle,
+html[data-theme='light'] .glass-panel,
+html[data-theme='light'] .glass-pill,
+html[data-theme='light'] .glass-circle {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme='light'] .glass-card > .glass-highlight,
+html[data-theme='light'] .glass-card-strong > .glass-highlight {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0.2) 40%,
+    transparent 100%
+  );
+}
+
+html[data-theme='light'] .glass-card::before,
+html[data-theme='light'] .glass-card-strong::before,
+html[data-theme='light'] .glass-card-subtle::before,
+html[data-theme='light'] .glass-panel::before,
+html[data-theme='light'] .glass-pill::before,
+html[data-theme='light'] .glass-circle::before {
+  opacity: 0.25;
+}
+
+html[data-theme='light'] .glass-card-strong::before {
+  opacity: 0.4;
+}
