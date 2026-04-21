@@ -92,13 +92,6 @@
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
     });
 
-    /* Injeta botão de favorito no canto */
-    if (window.VCTV_FAV) {
-      const fav = window.VCTV_FAV.createFavButton(ed.id);
-      fav.classList.add('gallery-item__fav');
-      item.appendChild(fav);
-    }
-
     return { item, canvas, skeleton, fallback };
   }
 
@@ -157,15 +150,6 @@
 
   function init() {
     render();
-    document.addEventListener('vctv:favorites-changed', () => {
-      /* Atualiza estado dos favs na galeria sem re-renderizar thumbs */
-      U.qsa('.gallery-item .fav-btn').forEach((btn) => {
-        if (window.VCTV_FAV) {
-          const id = btn.dataset.id;
-          btn.classList.toggle('is-favorited', window.VCTV_FAV.isFav(id));
-        }
-      });
-    });
   }
 
   window.VCTV_GALLERY = { init, render, renderCover };

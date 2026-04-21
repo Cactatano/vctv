@@ -84,23 +84,15 @@
     footer.appendChild(cta);
     card.appendChild(footer);
 
-    /* Favorito */
-    if (window.VCTV_FAV) {
-      const fav = window.VCTV_FAV.createFavButton(ed.id);
-      fav.classList.add('edition-card__fav');
-      card.appendChild(fav);
-    }
-
     /* Barra de cor no topo (corTema) */
     if (ed.corTema) {
       card.style.setProperty('--accent', ed.corTema);
       card.classList.add('has-accent');
     }
 
-    /* Click no card inteiro (exceto fav) abre */
+    /* Click no card inteiro abre o PDF */
     card.addEventListener('click', (e) => {
-      if (e.target.closest('.fav-btn')) return;
-      if (e.target.closest('[data-open-pdf]')) return; /* botão já trata */
+      if (e.target.closest('[data-open-pdf]')) return;
       if (window.VCTV_PDF && window.VCTV_PDF.open) window.VCTV_PDF.open(ed);
     });
     card.addEventListener('keydown', (e) => {
@@ -182,13 +174,6 @@
         .catch(() => { fallback.classList.add('is-visible'); });
     } else {
       fallback.classList.add('is-visible');
-    }
-
-    /* Favorito no canto */
-    if (window.VCTV_FAV) {
-      const fav = window.VCTV_FAV.createFavButton(ed.id);
-      fav.classList.add('featured__fav');
-      host.appendChild(fav);
     }
   }
 
@@ -345,15 +330,6 @@
     renderEditionsGrid();
     renderTeam();
     updateYear();
-
-    document.addEventListener('vctv:favorites-changed', () => {
-      /* Propaga estado do fav em todos os cards abertos */
-      U.qsa('.fav-btn[data-id]').forEach((btn) => {
-        if (window.VCTV_FAV) {
-          btn.classList.toggle('is-favorited', window.VCTV_FAV.isFav(btn.dataset.id));
-        }
-      });
-    });
   }
 
   window.VCTV_RENDER = {
