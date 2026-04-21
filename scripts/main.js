@@ -145,7 +145,6 @@
        depois utils, favoritos (injeta gradient), intro, render,
        depois os módulos que dependem de dados renderizados. */
     if (window.VCTV_THEME) window.VCTV_THEME.init();
-    if (window.VCTV_FAV) window.VCTV_FAV.init();
 
     /* Intro — só se for primeira visita */
     if (window.VCTV_INTRO) window.VCTV_INTRO.init();
