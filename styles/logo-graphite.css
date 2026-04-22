@@ -1,0 +1,289 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — logo-graphite.css
+   Nova logo: letras em branco grafite com textura granulada,
+   halo roxo (esquerda) → verde (direita) e linha gradient por baixo.
+   Também espalha detalhes em branco grafite por alguns pontos do site.
+   Carregar DEPOIS de liquid-glass-plus.css.
+   =========================================================== */
+
+:root {
+  --graphite-white:       #efece6;
+  --graphite-white-soft:  #f5f2eb;
+  --graphite-white-dim:   #d9d4c8;
+  --graphite-ink:         #2a2528;
+  --graphite-grain:       url('../assets/noise.svg');
+}
+
+/* ─── LOGO NOVA (hero + header + intro) ─────────────────── */
+.vctv-logo-new {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  position: relative;
+  isolation: isolate;
+}
+
+.vctv-logo-new__word {
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  color: var(--graphite-white);
+  position: relative;
+  text-shadow:
+    -2px 0 18px rgba(160, 80, 240, 0.85),
+    -4px 0 36px rgba(160, 80, 240, 0.55),
+     2px 0 18px rgba(0, 230, 110, 0.85),
+     4px 0 36px rgba(0, 230, 110, 0.55),
+     0 0 60px rgba(239, 236, 230, 0.25);
+  background-image: var(--graphite-grain);
+  background-size: 180px 180px;
+  background-blend-mode: overlay;
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+
+.vctv-logo-new__tm {
+  font-size: clamp(1rem, 3vw, 1.6rem);
+  color: var(--graphite-white);
+  letter-spacing: 0;
+  margin-top: -0.15em;
+  opacity: 0.95;
+  text-shadow:
+    -1px 0 10px rgba(160, 80, 240, 0.7),
+     1px 0 10px rgba(0, 230, 110, 0.7);
+  background-image: var(--graphite-grain);
+  background-size: 120px 120px;
+  background-blend-mode: overlay;
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+
+.vctv-logo-new__line {
+  width: 60%;
+  height: 2px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(160, 80, 240, 0.9) 35%,
+    rgba(239, 236, 230, 0.9) 50%,
+    rgba(0, 230, 110, 0.9) 65%,
+    transparent 100%);
+  box-shadow: 0 0 18px rgba(239, 236, 230, 0.5);
+}
+
+.vctv-logo-new__tagline {
+  margin-top: 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  color: var(--graphite-white);
+  letter-spacing: 0.01em;
+  text-shadow:
+    0 0 18px rgba(239, 236, 230, 0.4),
+    0 0 36px rgba(160, 80, 240, 0.3);
+  opacity: 0.92;
+}
+
+html[data-theme='light'] .vctv-logo-new__word,
+html[data-theme='light'] .vctv-logo-new__tm {
+  color: var(--graphite-ink);
+  text-shadow:
+    -2px 0 14px rgba(160, 80, 240, 0.45),
+     2px 0 14px rgba(0, 230, 110, 0.45);
+}
+html[data-theme='light'] .vctv-logo-new__tagline {
+  color: var(--graphite-ink);
+  text-shadow: none;
+  opacity: 0.78;
+}
+
+/* Pulsa sutilmente (só no hero) */
+.hero .vctv-logo-new__word {
+  animation: logo-breathe 4.5s ease-in-out infinite;
+}
+@keyframes logo-breathe {
+  0%,100% {
+    text-shadow:
+      -2px 0 18px rgba(160, 80, 240, 0.85),
+      -4px 0 36px rgba(160, 80, 240, 0.55),
+       2px 0 18px rgba(0, 230, 110, 0.85),
+       4px 0 36px rgba(0, 230, 110, 0.55),
+       0 0 60px rgba(239, 236, 230, 0.25);
+  }
+  50% {
+    text-shadow:
+      -3px 0 26px rgba(160, 80, 240, 1),
+      -6px 0 48px rgba(160, 80, 240, 0.7),
+       3px 0 26px rgba(0, 230, 110, 1),
+       6px 0 48px rgba(0, 230, 110, 0.7),
+       0 0 80px rgba(239, 236, 230, 0.4);
+  }
+}
+
+/* ─── DETALHES GRAFITE NO SITE ──────────────────────────── */
+
+/* Bordas superiores em branco grafite nas seções principais */
+.section-boundary,
+section.edition-card-wrap::before,
+.featured-edition::before {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 64px;
+  margin: 0 auto 20px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--graphite-white) 50%,
+    transparent);
+  opacity: 0.5;
+}
+
+/* "Selo" branco grafite pros títulos de seção */
+.section-title__eyebrow,
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--graphite-white);
+  background:
+    var(--graphite-grain),
+    color-mix(in srgb, var(--graphite-white) 8%, rgba(255, 255, 255, 0.02));
+  background-blend-mode: overlay, normal;
+  background-size: 140px 140px, auto;
+  border: 1px solid color-mix(in srgb, var(--graphite-white) 20%, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+}
+
+html[data-theme='light'] .section-title__eyebrow,
+html[data-theme='light'] .eyebrow {
+  color: var(--graphite-ink);
+  background:
+    var(--graphite-grain),
+    color-mix(in srgb, var(--graphite-white) 60%, rgba(255, 255, 255, 0.8));
+  background-blend-mode: multiply, normal;
+  border-color: rgba(90, 70, 110, 0.14);
+}
+
+/* Underline grafite granulado pros CTAs secundários */
+.btn-link,
+.btn-ghost::after {
+  position: relative;
+}
+.btn-link::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--graphite-white) 50%, transparent);
+  opacity: 0.5;
+  transform-origin: center;
+  transform: scaleX(0.4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+.btn-link:hover::after { transform: scaleX(1); opacity: 0.85; }
+
+/* Divisor ornamental grafite (pode usar com <hr class="divider-graphite">) */
+.divider-graphite {
+  border: 0;
+  height: 1px;
+  margin: 40px auto;
+  max-width: 320px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--graphite-white) 40%, transparent) 50%,
+    transparent);
+  position: relative;
+}
+.divider-graphite::after {
+  content: '✦';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  color: var(--graphite-white);
+  background: var(--bg-primary, #050309);
+  padding: 0 10px;
+  opacity: 0.7;
+}
+html[data-theme='light'] .divider-graphite::after {
+  color: var(--graphite-ink);
+  background: var(--bg-primary, #fff);
+  opacity: 0.5;
+}
+
+/* "Chips" grafite pros metadados das edições (data, tempo de leitura) */
+.meta-chip,
+.edition-meta__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--graphite-white) 85%, transparent);
+  background:
+    var(--graphite-grain),
+    color-mix(in srgb, var(--graphite-white) 6%, transparent);
+  background-size: 100px 100px, auto;
+  background-blend-mode: overlay, normal;
+  border: 1px solid color-mix(in srgb, var(--graphite-white) 14%, transparent);
+}
+html[data-theme='light'] .meta-chip,
+html[data-theme='light'] .edition-meta__item {
+  color: color-mix(in srgb, var(--graphite-ink) 85%, transparent);
+  background:
+    var(--graphite-grain),
+    color-mix(in srgb, var(--graphite-white) 55%, rgba(255, 255, 255, 0.6));
+  background-blend-mode: multiply, normal;
+  border-color: rgba(90, 70, 110, 0.1);
+}
+
+/* Scroll-top em branco grafite */
+.scroll-top {
+  background:
+    var(--graphite-grain),
+    color-mix(in srgb, var(--graphite-white) 10%, rgba(255, 255, 255, 0.04));
+  background-blend-mode: overlay, normal;
+  background-size: 140px 140px, auto;
+  border-color: color-mix(in srgb, var(--graphite-white) 22%, rgba(255, 255, 255, 0.12));
+}
+
+/* ─── LOGO "MINI" (pro header) ──────────────────────────── */
+.vctv-logo-mini {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 1.35rem;
+  letter-spacing: -0.035em;
+  color: var(--graphite-white);
+  text-shadow:
+    -1px 0 8px rgba(160, 80, 240, 0.6),
+     1px 0 8px rgba(0, 230, 110, 0.6);
+}
+.vctv-logo-mini sup {
+  font-size: 0.5em;
+  margin-left: 2px;
+  opacity: 0.8;
+  letter-spacing: 0;
+}
+html[data-theme='light'] .vctv-logo-mini {
+  color: var(--graphite-ink);
+  text-shadow:
+    -1px 0 6px rgba(160, 80, 240, 0.4),
+     1px 0 6px rgba(0, 230, 110, 0.4);
+}

@@ -66,22 +66,43 @@
     if (state.ctrl) state.ctrl.abort();
     state.ctrl = new AbortController();
 
-    const res = await fetch(POLL_URL + 'openai', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages, model: 'openai' }),
-      signal: state.ctrl.signal,
-    });
-    if (!res.ok) throw new Error('http ' + res.status);
-    const text = await res.text();
-    /* Pollinations retorna texto puro ou JSON {choices:[...]} */
+    /* Pollinations tem dois endpoints.  O POST em /openai é o
+       formato OpenAI-compat; responde JSON com choices[].message.
+       Se falhar (CORS, rate-limit), tenta o GET simples. */
     try {
-      const j = JSON.parse(text);
-      if (j.choices && j.choices[0] && j.choices[0].message) {
-        return j.choices[0].message.content;
-      }
-    } catch {}
-    return text;
+      const res = await fetch('https://text.pollinations.ai/openai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'openai',
+          messages,
+          temperature: 0.7,
+          private: true,
+        }),
+        signal: state.ctrl.signal,
+      });
+      if (!res.ok) throw new Error('post failed ' + res.status);
+      const text = await res.text();
+      try {
+        const j = JSON.parse(text);
+        if (j.choices && j.choices[0] && j.choices[0].message) {
+          return j.choices[0].message.content;
+        }
+        if (j.content) return j.content;
+      } catch { /* texto puro */ }
+      return text;
+    } catch (errPost) {
+      /* Fallback: GET com prompt concatenado (mais tolerante) */
+      const flat = messages.map((m) =>
+        (m.role === 'system' ? '[Instruções]: ' : m.role === 'user' ? '[Usuário]: ' : '[VCai]: ')
+        + m.content
+      ).join('\n\n') + '\n\n[VCai]:';
+      const url = 'https://text.pollinations.ai/' + encodeURIComponent(flat)
+        + '?model=openai&private=true';
+      const res2 = await fetch(url, { signal: state.ctrl.signal });
+      if (!res2.ok) throw new Error('get failed ' + res2.status);
+      return await res2.text();
+    }
   }
 
   /* ─── UI ─────────────────────────────────────────────── */
