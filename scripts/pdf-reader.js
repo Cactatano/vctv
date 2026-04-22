@@ -19,6 +19,8 @@
   const PDFJS_SRC = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
   const PDFJS_WORKER = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
+  const PROGRESS_KEY = 'vctv-pdf-progress';
+
   let pdfjsReady = null;
   let state = {
     doc: null,
@@ -33,7 +35,27 @@
     nextPageQueued: null,
     thumbsOpen: false,
     thumbsRendered: false,
+    darkMode: false,
+    helpOpen: false,
   };
+
+  function loadProgress() {
+    try {
+      const raw = localStorage.getItem(PROGRESS_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  }
+  function saveProgress(id, page) {
+    try {
+      const all = loadProgress();
+      all[id] = { page, ts: Date.now() };
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(all));
+    } catch {}
+  }
+  function getProgress(id) {
+    const all = loadProgress();
+    return all[id] ? all[id].page : null;
+  }
 
   function loadPdfJs() {
     if (pdfjsReady) return pdfjsReady;
@@ -84,6 +106,14 @@
       class: 'pdf-reader__btn glass-circle', id: 'pdf-btn-fitw',
       'aria-label': 'Ajustar à largura', type: 'button', title: 'Ajustar largura (W)',
     }, '↔');
+    const btnDark = U.create('button', {
+      class: 'pdf-reader__btn glass-circle', id: 'pdf-btn-dark',
+      'aria-label': 'Alternar modo escuro do PDF', type: 'button', title: 'Modo escuro (D)',
+    }, '◐');
+    const btnHelp = U.create('button', {
+      class: 'pdf-reader__btn glass-circle', id: 'pdf-btn-help',
+      'aria-label': 'Mostrar atalhos', type: 'button', title: 'Atalhos (?)',
+    }, '?');
     const btnShare = U.create('button', {
       class: 'pdf-reader__btn glass-circle',
       'aria-label': 'Compartilhar edição', type: 'button', title: 'Compartilhar',
@@ -101,7 +131,7 @@
       'aria-label': 'Fechar leitor', type: 'button', title: 'Fechar (Esc)',
     }, '×');
 
-    [btnThumbs, btnFitWidth, btnShare, btnDownload, btnFs, btnClose].forEach((b) => headerRight.appendChild(b));
+    [btnThumbs, btnFitWidth, btnDark, btnHelp, btnShare, btnDownload, btnFs, btnClose].forEach((b) => headerRight.appendChild(b));
     header.appendChild(headerRight);
     modal.appendChild(header);
 
@@ -137,6 +167,28 @@
         '<div class="pdf-reader__loading-label">Carregando edição…</div>' +
       '</div>';
     viewport.appendChild(loading);
+
+    /* Help overlay (atalhos) */
+    const help = U.create('div', { class: 'pdf-reader__help', id: 'pdf-help' });
+    help.innerHTML =
+      '<div class="pdf-reader__help-card glass-card">' +
+        '<div class="eyebrow">Atalhos de teclado</div>' +
+        '<h3 style="font-family:Fraunces,serif;margin:8px 0 14px;font-weight:700;">Navegação rápida</h3>' +
+        '<div class="pdf-reader__help-grid">' +
+          '<kbd>← →</kbd><span>Página anterior / próxima</span>' +
+          '<kbd>PgUp PgDn</kbd><span>Idem</span>' +
+          '<kbd>Home / End</kbd><span>Primeira / última página</span>' +
+          '<kbd>+  −</kbd><span>Zoom in / out</span>' +
+          '<kbd>W</kbd><span>Ajustar à largura</span>' +
+          '<kbd>T</kbd><span>Miniaturas</span>' +
+          '<kbd>D</kbd><span>Modo escuro do PDF</span>' +
+          '<kbd>F</kbd><span>Tela cheia</span>' +
+          '<kbd>?</kbd><span>Mostrar / esconder ajuda</span>' +
+          '<kbd>Esc</kbd><span>Fechar leitor</span>' +
+        '</div>' +
+        '<button class="glass-pill" type="button" id="pdf-help-close" style="margin-top:14px;cursor:pointer;">Entendi</button>' +
+      '</div>';
+    viewport.appendChild(help);
 
     /* Botões flutuantes de navegação laterais */
     const floatPrev = U.create('button', {
@@ -205,6 +257,11 @@
     btnFs.addEventListener('click', toggleFullscreen);
     btnThumbs.addEventListener('click', toggleThumbs);
     btnFitWidth.addEventListener('click', fitToWidth);
+    btnDark.addEventListener('click', toggleDark);
+    btnHelp.addEventListener('click', toggleHelp);
+    const helpCloseBtn = help.querySelector('#pdf-help-close');
+    if (helpCloseBtn) helpCloseBtn.addEventListener('click', toggleHelp);
+    help.addEventListener('click', (e) => { if (e.target === help) toggleHelp(); });
     navPrev.addEventListener('click', prevPage);
     navNext.addEventListener('click', nextPage);
     floatPrev.addEventListener('click', prevPage);
@@ -324,6 +381,11 @@
       const slider = U.qs('#pdf-slider');
       if (slider && Number(slider.value) !== state.page) slider.value = String(state.page);
 
+      /* Persiste progresso */
+      if (state.edition && state.edition.id) {
+        saveProgress(state.edition.id, state.page);
+      }
+
       const thumbs = U.qsa('.pdf-thumb', U.qs('#pdf-thumbs'));
       thumbs.forEach((t) => t.classList.toggle('is-active', Number(t.dataset.page) === state.page));
       const active = thumbs.find((t) => Number(t.dataset.page) === state.page);
@@ -392,6 +454,19 @@
     renderPage();
   }
 
+  function toggleDark() {
+    state.darkMode = !state.darkMode;
+    const overlay = U.qs('#pdf-reader-overlay');
+    if (overlay) overlay.classList.toggle('is-dark-pdf', state.darkMode);
+    U.toast && U.toast.info && U.toast.info(state.darkMode ? 'Modo escuro ativado' : 'Modo escuro desativado');
+  }
+
+  function toggleHelp() {
+    state.helpOpen = !state.helpOpen;
+    const overlay = U.qs('#pdf-reader-overlay');
+    if (overlay) overlay.classList.toggle('is-help-open', state.helpOpen);
+  }
+
   function setScale(s) {
     state.fit = 'custom';
     state.scale = U.clamp(s, 0.5, 3);
@@ -434,6 +509,11 @@
 
   function keydown(e) {
     if (!state.open) return;
+    /* Se o help tá aberto, só Esc e ? fecham */
+    if (state.helpOpen) {
+      if (e.key === 'Escape' || e.key === '?') toggleHelp();
+      return;
+    }
     if (e.key === 'Escape') close();
     if (e.key === 'ArrowRight' || e.key === 'PageDown') nextPage();
     if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevPage();
@@ -444,6 +524,8 @@
     if (e.key === 'f' || e.key === 'F') toggleFullscreen();
     if (e.key === 't' || e.key === 'T') toggleThumbs();
     if (e.key === 'w' || e.key === 'W') fitToWidth();
+    if (e.key === 'd' || e.key === 'D') toggleDark();
+    if (e.key === '?') toggleHelp();
   }
 
   async function open(edition) {
@@ -487,6 +569,16 @@
 
     try {
       await loadDoc(pdfUrl);
+
+      /* Resume progresso se tiver */
+      const saved = getProgress(edition.id);
+      if (saved && saved > 1 && saved <= state.total) {
+        state.page = saved;
+        if (U.toast && U.toast.info) {
+          U.toast.info('Continuando da página ' + saved);
+        }
+      }
+
       await renderPage();
     } catch (err) {
       if (loading) {

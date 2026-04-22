@@ -39,10 +39,34 @@
     }
   }
 
+  function injectLayers(el) {
+    /* Só pra cards grandes — pills/circles não precisam dessas camadas */
+    if (!el.matches('.glass-card, .glass-card-strong, .glass-panel')) return;
+    if (el.querySelector(':scope > .lg-layers')) return;
+
+    const layers = document.createElement('span');
+    layers.className = 'lg-layers';
+    layers.setAttribute('aria-hidden', 'true');
+
+    const sweep = document.createElement('span');
+    sweep.className = 'lg-sweep';
+    sweep.setAttribute('aria-hidden', 'true');
+
+    const grain = document.createElement('span');
+    grain.className = 'lg-grain';
+    grain.setAttribute('aria-hidden', 'true');
+
+    /* prepend pra não atrapalhar ::before/::after nem ordenar acima do conteúdo */
+    el.insertBefore(grain, el.firstChild);
+    el.insertBefore(sweep, el.firstChild);
+    el.insertBefore(layers, el.firstChild);
+  }
+
   function bind(el) {
     if (el.__glassBound) return;
     el.__glassBound = true;
     el.classList.add('is-reactive');
+    injectLayers(el);
     el.addEventListener('pointermove', U.rafSchedule(handlePointerMove));
     el.addEventListener('pointerleave', handlePointerLeave);
   }
