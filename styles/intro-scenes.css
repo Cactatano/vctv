@@ -1,0 +1,595 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — intro-scenes.css
+   Animações REAIS por cena + layout completo do overlay da intro.
+   =========================================================== */
+
+/* ─── OVERLAY FUNDO ─────────────────────────────────────── */
+.intro-root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(ellipse at top, #1a0a2e 0%, #050309 70%);
+  color: #f5f8f8;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.intro-root.is-leaving {
+  opacity: 0;
+  transform: scale(1.08);
+  pointer-events: none;
+}
+body.intro-active { overflow: hidden; }
+
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.intro-orb {
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.55;
+  animation: intro-drift 12s ease-in-out infinite;
+}
+.intro-orb--purple {
+  top: -200px; left: -200px;
+  background: radial-gradient(circle, rgba(160,80,240,0.8) 0%, transparent 70%);
+}
+.intro-orb--green {
+  bottom: -200px; right: -200px;
+  background: radial-gradient(circle, rgba(0,230,110,0.6) 0%, transparent 70%);
+  animation-delay: -6s;
+}
+@keyframes intro-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%     { transform: translate(60px,-40px) scale(1.1); }
+  66%     { transform: translate(-40px,60px) scale(0.95); }
+}
+.intro-noise {
+  position: absolute; inset: 0;
+  background: url('../assets/noise.svg');
+  background-size: 220px 220px;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.intro-logo {
+  position: absolute;
+  top: 24px; left: 28px;
+  z-index: 20;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  opacity: 0.85;
+}
+.intro-logo sup { font-size: 0.55em; margin-left: 2px; opacity: 0.7; }
+
+.intro-skip {
+  position: absolute;
+  top: 24px; right: 28px;
+  z-index: 20;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 16px !important;
+  cursor: pointer;
+}
+
+/* ─── STAGE COM AS CENAS ────────────────────────────────── */
+.intro-stage {
+  position: relative;
+  width: min(920px, 92%);
+  height: min(620px, 78vh);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.intro-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-scene.is-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.intro-scene__inner {
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+  padding: 24px;
+}
+
+.intro-scene__index {
+  font-family: monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: rgba(245,248,248,0.5);
+  margin-bottom: 18px;
+  opacity: 0;
+  animation: intro-fade-down 0.6s 0.1s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+.intro-scene.is-active .intro-scene__index { animation-play-state: running; }
+
+.intro-scene__title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 5.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  margin-bottom: 14px;
+  opacity: 0;
+}
+
+.intro-scene.is-active .intro-scene__title {
+  animation: intro-fade-up 0.7s 0.25s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-scene__subtitle {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 18px;
+  opacity: 0;
+  background: linear-gradient(135deg, #a050f0 0%, #00e66e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.intro-scene.is-active .intro-scene__subtitle {
+  animation: intro-fade-up 0.7s 0.5s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.intro-scene__body {
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: rgba(245,248,248,0.75);
+  max-width: 520px;
+  margin: 0 auto 28px;
+  line-height: 1.55;
+  opacity: 0;
+}
+.intro-scene.is-active .intro-scene__body {
+  animation: intro-fade-up 0.7s 0.75s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes intro-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes intro-fade-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── ARTE POR CENA (intro-scene__art) ─────────────────── */
+.intro-scene__art {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+.intro-scene.is-active .intro-scene__art {
+  animation: intro-fade-up 0.8s 0.15s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── CENA 1 · BOOT · Barra de carregamento + logo pulsando ───────── */
+.intro-scene__art[data-art="boot"] {
+  flex-direction: column;
+  gap: 16px;
+}
+.intro-scene__art[data-art="boot"]::before {
+  content: 'VCtv TM';
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #a050f0 0%, #00e66e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(160,80,240,0.4));
+}
+.intro-scene__art[data-art="boot"]::after {
+  content: '';
+  width: 240px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.intro-scene--boot.is-active .intro-scene__art[data-art="boot"]::after {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.08) 0%,
+    #a050f0 25%,
+    #00e66e 50%,
+    rgba(255,255,255,0.08) 75%) 0/200% 100%;
+  animation: boot-load 2.4s linear infinite;
+}
+@keyframes boot-load {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.intro-scene--boot.is-active .intro-scene__art[data-art="boot"]::before {
+  animation: boot-pulse 1.8s ease-in-out infinite;
+}
+@keyframes boot-pulse {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 18px rgba(160,80,240,0.4)); }
+  50%     { transform: scale(1.04); filter: drop-shadow(0 0 32px rgba(0,230,110,0.6)); }
+}
+
+/* ─── CENA 2 · MISSION · Corações flutuando ───────────────────────── */
+.intro-scene__art[data-art="mission"] {
+  position: relative;
+  overflow: visible;
+}
+.intro-scene__art[data-art="mission"]::before,
+.intro-scene__art[data-art="mission"]::after {
+  content: '💜';
+  position: absolute;
+  font-size: 2.4rem;
+  filter: drop-shadow(0 6px 14px rgba(160,80,240,0.45));
+  opacity: 0;
+}
+.intro-scene__art[data-art="mission"]::before { left: 28%; }
+.intro-scene__art[data-art="mission"]::after  { right: 28%; content: '💚'; filter: drop-shadow(0 6px 14px rgba(0,230,110,0.45)); }
+.intro-scene--mission.is-active .intro-scene__art[data-art="mission"]::before {
+  animation: heart-float 3s 0.3s ease-in-out infinite;
+}
+.intro-scene--mission.is-active .intro-scene__art[data-art="mission"]::after {
+  animation: heart-float 3s 0.9s ease-in-out infinite;
+}
+@keyframes heart-float {
+  0%   { opacity: 0; transform: translateY(30px) scale(0.7); }
+  30%  { opacity: 1; transform: translateY(0) scale(1); }
+  70%  { opacity: 1; transform: translateY(-20px) scale(1.05); }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.9); }
+}
+
+/* ─── CENA 3 · SEARCH · Campo digitando + lupa ────────────────────── */
+.intro-scene__art[data-art="search"] {
+  flex-direction: row;
+  gap: 12px;
+}
+.intro-scene__art[data-art="search"]::before {
+  content: '🔎';
+  font-size: 2rem;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 10px rgba(160,80,240,0.35));
+}
+.intro-scene__art[data-art="search"]::after {
+  content: 'pergunte algo…';
+  display: inline-block;
+  padding: 14px 22px;
+  min-width: 300px;
+  border-radius: 16px;
+  background: color-mix(in srgb, #efece6 12%, rgba(255,255,255,0.04));
+  border: 1px solid rgba(239,236,230,0.18);
+  font-family: monospace;
+  font-size: 1.05rem;
+  color: rgba(239,236,230,0.75);
+  text-align: left;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 10px 24px rgba(0,0,0,0.3);
+  position: relative;
+}
+.intro-scene--search.is-active .intro-scene__art[data-art="search"]::before {
+  animation: search-wiggle 1.8s ease-in-out infinite;
+}
+.intro-scene--search.is-active .intro-scene__art[data-art="search"]::after {
+  animation: search-type 3s steps(16, end) infinite;
+  border-right: 2px solid rgba(0,230,110,0.9);
+}
+@keyframes search-wiggle {
+  0%,100% { transform: rotate(-8deg) translateY(0); }
+  50%     { transform: rotate(8deg) translateY(-4px); }
+}
+@keyframes search-type {
+  0%   { content: '|'; }
+  15%  { content: 'Copa |'; }
+  35%  { content: 'Copa 2026|'; }
+  60%  { content: 'Copa 2026 no |'; }
+  85%  { content: 'Copa 2026 no Br|'; }
+  100% { content: 'Copa 2026 no Brasil'; }
+}
+
+/* ─── CENA 4 · FAVORITES (arquivão) · Estrelas brilhando ──────────── */
+.intro-scene__art[data-art="favorites"] {
+  gap: 14px;
+  flex-direction: row;
+}
+.intro-scene__art[data-art="favorites"]::before,
+.intro-scene__art[data-art="favorites"]::after {
+  content: '✦';
+  font-size: 2.6rem;
+  color: #efece6;
+  filter: drop-shadow(0 0 12px rgba(160,80,240,0.7));
+}
+.intro-scene__art[data-art="favorites"]::after {
+  content: '✧';
+  filter: drop-shadow(0 0 12px rgba(0,230,110,0.7));
+}
+.intro-scene--favorites.is-active .intro-scene__art[data-art="favorites"]::before {
+  animation: star-twinkle 2s ease-in-out infinite;
+}
+.intro-scene--favorites.is-active .intro-scene__art[data-art="favorites"]::after {
+  animation: star-twinkle 2s 0.6s ease-in-out infinite;
+}
+@keyframes star-twinkle {
+  0%,100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+  50%     { transform: scale(1.3) rotate(180deg); opacity: 1; }
+}
+
+/* ─── CENA 5 · GALLERY · Grade 3x3 de capas alternando ───────────── */
+.intro-scene__art[data-art="gallery"] {
+  height: 180px;
+}
+.intro-scene__art[data-art="gallery"]::before {
+  content: '';
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(3, 45px);
+  gap: 8px;
+  width: auto;
+  height: auto;
+  background:
+    linear-gradient(135deg, #a050f0, #00e66e) 0 0/60px 45px,
+    linear-gradient(135deg, #00e66e, #a050f0) 68px 0/60px 45px,
+    linear-gradient(135deg, #a050f0, #efece6) 136px 0/60px 45px,
+    linear-gradient(135deg, #efece6, #00e66e) 0 53px/60px 45px,
+    linear-gradient(135deg, #a050f0, #00e66e) 68px 53px/60px 45px,
+    linear-gradient(135deg, #00e66e, #efece6) 136px 53px/60px 45px,
+    linear-gradient(135deg, #00e66e, #a050f0) 0 106px/60px 45px,
+    linear-gradient(135deg, #efece6, #a050f0) 68px 106px/60px 45px,
+    linear-gradient(135deg, #a050f0, #00e66e) 136px 106px/60px 45px;
+  background-repeat: no-repeat;
+  width: 196px;
+  height: 151px;
+  border-radius: 10px;
+  filter: drop-shadow(0 10px 28px rgba(0,0,0,0.4));
+}
+.intro-scene--gallery.is-active .intro-scene__art[data-art="gallery"]::before {
+  animation: gallery-shuffle 2.8s ease-in-out infinite;
+}
+@keyframes gallery-shuffle {
+  0%,100% { transform: perspective(600px) rotateY(-8deg) rotateX(6deg); filter: drop-shadow(0 10px 28px rgba(160,80,240,0.4)) hue-rotate(0deg); }
+  50%     { transform: perspective(600px) rotateY(8deg) rotateX(-4deg); filter: drop-shadow(0 10px 28px rgba(0,230,110,0.4)) hue-rotate(45deg); }
+}
+
+/* ─── CENA 6 · THEME · Sol ⇆ Lua ─────────────────────────────────── */
+.intro-scene__art[data-art="theme"] {
+  gap: 24px;
+  flex-direction: row;
+}
+.intro-scene__art[data-art="theme"]::before {
+  content: '☀️';
+  font-size: 3rem;
+  filter: drop-shadow(0 0 20px rgba(255,220,100,0.6));
+}
+.intro-scene__art[data-art="theme"]::after {
+  content: '🌙';
+  font-size: 3rem;
+  filter: drop-shadow(0 0 20px rgba(160,80,240,0.6));
+}
+.intro-scene--theme.is-active .intro-scene__art[data-art="theme"]::before {
+  animation: theme-swap-sun 3s ease-in-out infinite;
+}
+.intro-scene--theme.is-active .intro-scene__art[data-art="theme"]::after {
+  animation: theme-swap-moon 3s ease-in-out infinite;
+}
+@keyframes theme-swap-sun {
+  0%,100% { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; }
+  50%     { transform: translateX(60px) rotate(360deg) scale(0.7); opacity: 0.4; }
+}
+@keyframes theme-swap-moon {
+  0%,100% { transform: translateX(0) rotate(0deg) scale(0.7); opacity: 0.4; }
+  50%     { transform: translateX(-60px) rotate(-360deg) scale(1); opacity: 1; }
+}
+
+/* ─── CENA 7 · PDF · Páginas virando ─────────────────────────────── */
+.intro-scene__art[data-art="pdf"] {
+  perspective: 1000px;
+  height: 170px;
+}
+.intro-scene__art[data-art="pdf"]::before {
+  content: '';
+  width: 130px;
+  height: 160px;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, #efece6 0%, #d9d4c8 100%),
+    repeating-linear-gradient(180deg, transparent 0 12px, rgba(90,70,110,0.08) 12px 13px);
+  background-blend-mode: multiply;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 20px 40px -10px rgba(0,0,0,0.5),
+    -8px 0 0 -2px #d9d4c8,
+    -8px 0 0 -1px rgba(0,0,0,0.15),
+    -16px 0 0 -4px #c9c4b8,
+    -16px 0 0 -3px rgba(0,0,0,0.12);
+  position: relative;
+  transform-origin: left center;
+}
+.intro-scene--pdf.is-active .intro-scene__art[data-art="pdf"]::before {
+  animation: pdf-flip 3s ease-in-out infinite;
+}
+@keyframes pdf-flip {
+  0%,100% { transform: rotateY(0deg); }
+  50%     { transform: rotateY(-60deg); }
+}
+.intro-scene__art[data-art="pdf"]::after {
+  content: 'PDF';
+  position: absolute;
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: #a050f0;
+  letter-spacing: -0.02em;
+  mix-blend-mode: multiply;
+}
+
+/* ─── CENA 8 · VCAI · Mascote falando ────────────────────────────── */
+.intro-scene__art[data-art="vcai"] {
+  gap: 16px;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.intro-scene__art[data-art="vcai"]::before {
+  content: '🤖';
+  font-size: 3.4rem;
+  filter: drop-shadow(0 8px 20px rgba(160,80,240,0.5));
+}
+.intro-scene__art[data-art="vcai"]::after {
+  content: 'Oi! Sou o VCai 💜';
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 18px 18px 18px 4px;
+  background: linear-gradient(135deg, rgba(160,80,240,0.3), rgba(0,230,110,0.3));
+  border: 1px solid rgba(239,236,230,0.2);
+  color: #efece6;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+.intro-scene--vcai.is-active .intro-scene__art[data-art="vcai"]::before {
+  animation: vcai-bob 2s ease-in-out infinite;
+}
+.intro-scene--vcai.is-active .intro-scene__art[data-art="vcai"]::after {
+  animation: vcai-pop 2s ease-in-out infinite;
+  transform-origin: bottom left;
+}
+@keyframes vcai-bob {
+  0%,100% { transform: translateY(0) rotate(-4deg); }
+  50%     { transform: translateY(-8px) rotate(4deg); }
+}
+@keyframes vcai-pop {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%     { transform: scale(1.06); opacity: 0.95; }
+}
+
+/* ─── CENA 9 · FINAL · Logo + estouro de faíscas ─────────────────── */
+.intro-scene__art[data-art="final"] {
+  position: relative;
+}
+.intro-scene__art[data-art="final"]::before {
+  content: '✨';
+  position: absolute;
+  font-size: 2rem;
+  filter: drop-shadow(0 0 14px rgba(160,80,240,0.7));
+  animation: spark-left 2.2s ease-in-out infinite;
+}
+.intro-scene__art[data-art="final"]::after {
+  content: '✨';
+  position: absolute;
+  font-size: 2rem;
+  filter: drop-shadow(0 0 14px rgba(0,230,110,0.7));
+  animation: spark-right 2.2s 0.4s ease-in-out infinite;
+}
+@keyframes spark-left {
+  0%   { opacity: 0; transform: translate(0,0) scale(0.4) rotate(0deg); }
+  50%  { opacity: 1; transform: translate(-120px,-40px) scale(1.1) rotate(180deg); }
+  100% { opacity: 0; transform: translate(-200px,-80px) scale(0.6) rotate(360deg); }
+}
+@keyframes spark-right {
+  0%   { opacity: 0; transform: translate(0,0) scale(0.4) rotate(0deg); }
+  50%  { opacity: 1; transform: translate(120px,-40px) scale(1.1) rotate(-180deg); }
+  100% { opacity: 0; transform: translate(200px,-80px) scale(0.6) rotate(-360deg); }
+}
+
+/* ─── PROGRESS DOTS ─────────────────────────────────────── */
+.intro-progress {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 20;
+}
+.intro-progress__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(239,236,230,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.intro-progress__dot.is-active {
+  background: linear-gradient(135deg, #a050f0, #00e66e);
+  width: 32px;
+  border-radius: 999px;
+  box-shadow: 0 0 16px rgba(160,80,240,0.5);
+}
+.intro-progress__dot.is-past {
+  background: rgba(239,236,230,0.5);
+}
+
+/* ─── CONTROLES ─────────────────────────────────────────── */
+.intro-controls {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 20;
+}
+.intro-ctrl {
+  width: 48px; height: 48px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #efece6;
+}
+
+/* ─── BOTÃO ENTRAR (última cena) ────────────────────────── */
+.intro-enter {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 21;
+  padding: 14px 32px !important;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.intro-enter.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+@media (max-width: 680px) {
+  .intro-stage { height: min(560px, 72vh); }
+  .intro-scene__inner { padding: 16px; }
+  .intro-scene__art { height: 130px; margin-bottom: 14px; }
+  .intro-progress { bottom: 100px; }
+  .intro-controls { bottom: 36px; }
+  .intro-enter { bottom: 140px; }
+  .intro-logo { top: 16px; left: 18px; font-size: 1.1rem; }
+  .intro-skip { top: 16px; right: 18px; font-size: 0.75rem; padding: 6px 12px !important; }
+}

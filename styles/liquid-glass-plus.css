@@ -1,0 +1,256 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — liquid-glass-plus.css
+   Polimento do Liquid Glass pra ficar mais fiel ao sistema da Apple:
+   blur mais denso, specular highlight reativo ao cursor, refração
+   cromática sutil, reflexo interno vivo, sombras em múltiplas camadas.
+   Carregar DEPOIS de liquid-glass.css.
+   =========================================================== */
+
+/* ─── TOKENS NOVOS ──────────────────────────────────────── */
+:root {
+  --lg-blur:            blur(24px) saturate(200%) brightness(1.08);
+  --lg-blur-strong:     blur(38px) saturate(230%) brightness(1.12);
+  --lg-blur-subtle:     blur(14px) saturate(160%);
+  --lg-tint:            color-mix(in srgb, var(--purple) 6%, rgba(255,255,255,0.04));
+  --lg-tint-light:      color-mix(in srgb, var(--purple) 4%, rgba(255,255,255,0.55));
+  --lg-highlight:       linear-gradient(180deg,
+                          rgba(255,255,255,0.22) 0%,
+                          rgba(255,255,255,0.06) 14%,
+                          transparent 40%);
+  --lg-chroma:          conic-gradient(from 130deg at 50% 50%,
+                          rgba(160,80,240,0.35),
+                          rgba(0,230,110,0.35),
+                          rgba(160,80,240,0.35));
+  --lg-shadow:          0 1px 0 rgba(255,255,255,0.08) inset,
+                        0 -1px 0 rgba(0,0,0,0.12) inset,
+                        0 18px 48px -16px rgba(5,3,9,0.55),
+                        0 6px 16px -8px rgba(160,80,240,0.18),
+                        0 2px 6px rgba(0,0,0,0.25);
+  --lg-shadow-strong:   0 1px 0 rgba(255,255,255,0.14) inset,
+                        0 -1px 0 rgba(0,0,0,0.14) inset,
+                        0 36px 72px -18px rgba(5,3,9,0.7),
+                        0 12px 28px -10px rgba(160,80,240,0.28),
+                        0 4px 10px rgba(0,0,0,0.3);
+}
+
+html[data-theme='light'] {
+  --lg-tint:            color-mix(in srgb, var(--purple) 5%, rgba(255,255,255,0.7));
+  --lg-tint-light:      color-mix(in srgb, var(--purple) 3%, rgba(255,255,255,0.82));
+  --lg-shadow:          0 1px 0 rgba(255,255,255,0.85) inset,
+                        0 -1px 0 rgba(90,70,110,0.08) inset,
+                        0 18px 48px -16px rgba(60,40,90,0.2),
+                        0 6px 14px -8px rgba(160,80,240,0.12),
+                        0 2px 5px rgba(60,40,90,0.08);
+  --lg-shadow-strong:   0 1px 0 rgba(255,255,255,0.9) inset,
+                        0 -1px 0 rgba(90,70,110,0.1) inset,
+                        0 32px 64px -16px rgba(60,40,90,0.28),
+                        0 10px 22px -8px rgba(160,80,240,0.2),
+                        0 4px 10px rgba(60,40,90,0.12);
+}
+
+/* ─── OVERRIDE DO GLASS-CARD PRA FICAR MAIS APPLE-LIKE ──── */
+.glass-card,
+.glass-card-strong,
+.glass-card-subtle,
+.glass-panel {
+  background: var(--lg-tint);
+  -webkit-backdrop-filter: var(--lg-blur);
+  backdrop-filter: var(--lg-blur);
+  box-shadow: var(--lg-shadow);
+  border-radius: 22px;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--purple) 14%, rgba(255,255,255,0.08));
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    background 0.3s ease;
+  --mx: 50%;
+  --my: 50%;
+}
+
+.glass-card-strong {
+  -webkit-backdrop-filter: var(--lg-blur-strong);
+  backdrop-filter: var(--lg-blur-strong);
+  box-shadow: var(--lg-shadow-strong);
+  border-color: color-mix(in srgb, var(--purple) 22%, rgba(255,255,255,0.12));
+}
+
+.glass-card-subtle {
+  -webkit-backdrop-filter: var(--lg-blur-subtle);
+  backdrop-filter: var(--lg-blur-subtle);
+}
+
+/* Highlight superior (reflexo do topo do vidro) */
+.glass-card::before,
+.glass-card-strong::before,
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lg-highlight);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+}
+
+/* Specular highlight que SEGUE o cursor (reativo via --mx/--my) */
+.glass-card::after,
+.glass-card-strong::after,
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--mx) var(--my),
+    rgba(255,255,255,0.12),
+    rgba(160,80,240,0.04) 30%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: plus-lighter;
+}
+
+.glass-card:hover::after,
+.glass-card.is-reactive::after,
+.glass-card-strong:hover::after,
+.glass-card-strong.is-reactive::after,
+.glass-panel:hover::after {
+  opacity: 1;
+}
+
+html[data-theme='light'] .glass-card::after,
+html[data-theme='light'] .glass-card-strong::after,
+html[data-theme='light'] .glass-panel::after {
+  background: radial-gradient(
+    220px circle at var(--mx) var(--my),
+    rgba(255,255,255,0.55),
+    rgba(160,80,240,0.08) 30%,
+    transparent 55%
+  );
+  mix-blend-mode: overlay;
+}
+
+/* ─── BORDA GRADIENT REAL (usa mask-composite) ──────────── */
+.glass-card::before {
+  background:
+    var(--lg-highlight),
+    conic-gradient(from 130deg at 50% 50%,
+      rgba(160,80,240,0.55),
+      rgba(0,230,110,0.55),
+      rgba(160,80,240,0.55));
+  padding: 1px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 1;
+}
+
+.glass-card-strong::before {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.1) 12%, transparent 40%),
+    conic-gradient(from 130deg at 50% 50%,
+      rgba(160,80,240,0.85),
+      rgba(0,230,110,0.85),
+      rgba(160,80,240,0.85));
+  padding: 1.5px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: lg-border-rotate 14s linear infinite;
+}
+
+@keyframes lg-border-rotate {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Hover: card "levanta" + sombra aprofunda */
+.glass-card:hover,
+.glass-panel:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--purple) 22%, rgba(255,255,255,0.14));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 -1px 0 rgba(0,0,0,0.14) inset,
+    0 30px 60px -20px rgba(5,3,9,0.75),
+    0 10px 22px -8px rgba(160,80,240,0.28),
+    0 2px 8px rgba(0,0,0,0.3);
+}
+
+.glass-card-strong:hover {
+  transform: translateY(-3px);
+}
+
+/* ─── PILLS ───────────────────────────────────────────── */
+.glass-pill {
+  background: var(--lg-tint);
+  -webkit-backdrop-filter: var(--lg-blur-subtle);
+  backdrop-filter: var(--lg-blur-subtle);
+  border: 1px solid color-mix(in srgb, var(--purple) 20%, rgba(255,255,255,0.1));
+  border-radius: 999px;
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-primary);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.1) inset,
+    0 4px 12px rgba(0,0,0,0.18);
+  transition: transform 0.25s var(--ease-out-smooth, ease),
+              box-shadow 0.25s ease,
+              background 0.3s ease;
+}
+.glass-pill-strong {
+  background: color-mix(in srgb, var(--purple) 12%, var(--lg-tint));
+  border-color: color-mix(in srgb, var(--purple) 35%, rgba(255,255,255,0.14));
+}
+.glass-pill-filled {
+  background: linear-gradient(135deg, var(--purple), var(--green));
+  color: #0a0812;
+  border-color: transparent;
+  font-weight: 700;
+}
+.glass-pill:hover { transform: translateY(-1px); }
+
+/* ─── CIRCLES (botões redondos) ──────────────────────────── */
+.glass-circle {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--lg-tint);
+  -webkit-backdrop-filter: var(--lg-blur-subtle);
+  backdrop-filter: var(--lg-blur-subtle);
+  border: 1px solid color-mix(in srgb, var(--purple) 18%, rgba(255,255,255,0.1));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+}
+.glass-circle:hover {
+  transform: translateY(-1px) scale(1.05);
+  background: color-mix(in srgb, var(--purple) 16%, var(--lg-tint));
+}
+.glass-circle-lg { width: 64px; height: 64px; font-size: 1.6rem; }
+
+
