@@ -23,7 +23,7 @@
       id: 'mission',
       title: 'O jornal feito por você…',
       subtitle: 'pra VC.',
-      body: 'Criado em 2025, com carinho, com curiosidade, com nerdice.',
+      body: 'Criado em 2023, com carinho, com curiosidade, com vontade.',
     },
     {
       id: 'search',

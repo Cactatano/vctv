@@ -407,5 +407,78 @@ html[data-theme='light'] .pdf-reader__footer {
   .pdf-reader__loading-page { width: 220px; height: 300px; padding: 24px 18px; }
 }
 
+/* ─── MODO ESCURO DO PDF (inverte cores) ──────────── */
+.pdf-reader-overlay.is-dark-pdf .pdf-reader__canvas {
+  filter: invert(1) hue-rotate(180deg) brightness(1.05) contrast(0.92);
+}
+.pdf-reader-overlay.is-dark-pdf .pdf-thumb__canvas {
+  filter: invert(1) hue-rotate(180deg) brightness(1.05) contrast(0.92);
+}
+.pdf-reader-overlay.is-dark-pdf #pdf-btn-dark {
+  background: linear-gradient(135deg, #a050f0, #00e66e) !important;
+  color: #0a0812 !important;
+  box-shadow: 0 4px 12px rgba(160, 80, 240, 0.4) !important;
+}
+
+/* ─── HELP OVERLAY ──────────────────────────────────── */
+.pdf-reader__help {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #050309 70%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.pdf-reader-overlay.is-help-open .pdf-reader__help {
+  opacity: 1;
+  pointer-events: auto;
+}
+.pdf-reader__help-card {
+  max-width: 460px;
+  padding: 24px 28px;
+  text-align: left;
+  transform: translateY(10px);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pdf-reader-overlay.is-help-open .pdf-reader__help-card {
+  transform: translateY(0);
+}
+.pdf-reader__help-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 16px;
+  align-items: center;
+}
+.pdf-reader__help-grid kbd {
+  font-family: monospace;
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--graphite-white, #efece6) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--graphite-white, #efece6) 18%, transparent);
+  color: var(--graphite-white, #efece6);
+  white-space: nowrap;
+  text-align: center;
+}
+html[data-theme='light'] .pdf-reader__help-grid kbd {
+  background: rgba(90, 70, 110, 0.06);
+  border-color: rgba(90, 70, 110, 0.16);
+  color: var(--graphite-ink, #2a2528);
+}
+.pdf-reader__help-grid span {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--graphite-white, #efece6) 85%, transparent);
+}
+html[data-theme='light'] .pdf-reader__help-grid span {
+  color: color-mix(in srgb, var(--graphite-ink, #2a2528) 85%, transparent);
+}
+
 /* Evita scroll do body quando modal está aberta */
 body.has-modal { overflow: hidden; }
