@@ -19,109 +19,90 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
   font-family: 'Fraunces', serif;
-  font-weight: 900;
-  line-height: 0.9;
-  letter-spacing: -0.05em;
   position: relative;
   isolation: isolate;
+  padding: 4px 0;
+}
+
+/* Mark circular com "V" (monograma) acima do wordmark */
+.vctv-logo-new__mark {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+  filter: drop-shadow(0 4px 16px rgba(160, 80, 240, 0.25))
+          drop-shadow(0 4px 16px rgba(0, 230, 110, 0.2));
+}
+
+.vctv-logo-new__row {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
 }
 
 .vctv-logo-new__word {
-  font-size: clamp(3rem, 10vw, 6.5rem);
+  font-size: clamp(2.6rem, 8.5vw, 5.2rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
   color: var(--graphite-white);
   position: relative;
-  text-shadow:
-    -2px 0 18px rgba(160, 80, 240, 0.85),
-    -4px 0 36px rgba(160, 80, 240, 0.55),
-     2px 0 18px rgba(0, 230, 110, 0.85),
-     4px 0 36px rgba(0, 230, 110, 0.55),
-     0 0 60px rgba(239, 236, 230, 0.25);
-  background-image: var(--graphite-grain);
-  background-size: 180px 180px;
-  background-blend-mode: overlay;
-  -webkit-background-clip: text;
-          background-clip: text;
 }
 
 .vctv-logo-new__tm {
-  font-size: clamp(1rem, 3vw, 1.6rem);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+  letter-spacing: 0.04em;
   color: var(--graphite-white);
-  letter-spacing: 0;
-  margin-top: -0.15em;
-  opacity: 0.95;
-  text-shadow:
-    -1px 0 10px rgba(160, 80, 240, 0.7),
-     1px 0 10px rgba(0, 230, 110, 0.7);
-  background-image: var(--graphite-grain);
-  background-size: 120px 120px;
-  background-blend-mode: overlay;
-  -webkit-background-clip: text;
-          background-clip: text;
+  opacity: 0.8;
+  margin-left: 4px;
+  align-self: flex-start;
+  margin-top: 0.4em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--graphite-white) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--graphite-white) 18%, transparent);
 }
 
 .vctv-logo-new__line {
-  width: 60%;
-  height: 2px;
-  margin-top: 8px;
+  width: 52px;
+  height: 1.5px;
+  margin-top: 4px;
   border-radius: 999px;
   background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(160, 80, 240, 0.9) 35%,
-    rgba(239, 236, 230, 0.9) 50%,
-    rgba(0, 230, 110, 0.9) 65%,
-    transparent 100%);
-  box-shadow: 0 0 18px rgba(239, 236, 230, 0.5);
+    rgba(160, 80, 240, 0.85) 0%,
+    rgba(239, 236, 230, 0.6) 50%,
+    rgba(0, 230, 110, 0.85) 100%);
 }
 
 .vctv-logo-new__tagline {
-  margin-top: 14px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 500;
-  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
-  color: var(--graphite-white);
-  letter-spacing: 0.01em;
-  text-shadow:
-    0 0 18px rgba(239, 236, 230, 0.4),
-    0 0 36px rgba(160, 80, 240, 0.3);
-  opacity: 0.92;
+  margin-top: 2px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+  color: color-mix(in srgb, var(--graphite-white) 85%, transparent);
+  letter-spacing: 0.005em;
 }
 
 html[data-theme='light'] .vctv-logo-new__word,
-html[data-theme='light'] .vctv-logo-new__tm {
-  color: var(--graphite-ink);
-  text-shadow:
-    -2px 0 14px rgba(160, 80, 240, 0.45),
-     2px 0 14px rgba(0, 230, 110, 0.45);
-}
+html[data-theme='light'] .vctv-logo-new__tm,
 html[data-theme='light'] .vctv-logo-new__tagline {
   color: var(--graphite-ink);
-  text-shadow: none;
-  opacity: 0.78;
 }
-
-/* Pulsa sutilmente (só no hero) */
-.hero .vctv-logo-new__word {
-  animation: logo-breathe 4.5s ease-in-out infinite;
+html[data-theme='light'] .vctv-logo-new__tagline {
+  opacity: 0.75;
 }
-@keyframes logo-breathe {
-  0%,100% {
-    text-shadow:
-      -2px 0 18px rgba(160, 80, 240, 0.85),
-      -4px 0 36px rgba(160, 80, 240, 0.55),
-       2px 0 18px rgba(0, 230, 110, 0.85),
-       4px 0 36px rgba(0, 230, 110, 0.55),
-       0 0 60px rgba(239, 236, 230, 0.25);
-  }
-  50% {
-    text-shadow:
-      -3px 0 26px rgba(160, 80, 240, 1),
-      -6px 0 48px rgba(160, 80, 240, 0.7),
-       3px 0 26px rgba(0, 230, 110, 1),
-       6px 0 48px rgba(0, 230, 110, 0.7),
-       0 0 80px rgba(239, 236, 230, 0.4);
-  }
+html[data-theme='light'] .vctv-logo-new__tm {
+  background: color-mix(in srgb, var(--graphite-ink) 6%, transparent);
+  border-color: color-mix(in srgb, var(--graphite-ink) 18%, transparent);
 }
 
 /* ─── DETALHES GRAFITE NO SITE ──────────────────────────── */

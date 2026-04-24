@@ -1,0 +1,116 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — animation-kill.css
+   Desliga todas as animações de "brilho passando" (sweeps, shimmers,
+   gradient-slides, rotações de hue, etc.) pelo site.
+
+   Regra: manter pulsos/breathes/bounces em lugar (que NÃO são
+   brilhos passando) e matar tudo que desliza um gradient pelo card.
+   =========================================================== */
+
+/* Liquid glass antigo (plus/ultra) */
+.glass-card-strong::before            { animation: none !important; }
+.glass-card .lg-sweep::before,
+.glass-card-strong .lg-sweep::before,
+.glass-panel .lg-sweep::before        { animation: none !important; display: none !important; }
+.glass-card .lg-sweep,
+.glass-card-strong .lg-sweep,
+.glass-panel .lg-sweep                { display: none !important; }
+.glass-card .lg-grain,
+.glass-card-strong .lg-grain,
+.glass-panel .lg-grain                { display: none !important; }
+.glass-card .lg-layers,
+.glass-card-strong .lg-layers,
+.glass-panel .lg-layers               { display: none !important; }
+
+/* Intro — boot loader com barra gradient passando */
+.intro-scene--boot.is-active .intro-scene__art[data-art="boot"]::after {
+  animation: none !important;
+  background: linear-gradient(90deg, #a050f0, #00e66e) !important;
+  opacity: 0.6;
+}
+
+/* PDF reader — shimmer da tela de loading */
+.pdf-reader__loading-shimmer          { animation: none !important; display: none !important; }
+
+/* Skeleton shimmer (overrides.css) */
+.skeleton,
+.skeleton::before,
+.skeleton::after                      { animation: none !important; }
+
+/* VCai send button — tirar o pulse do botão durante envio */
+.vcai-send.is-sending                 { animation: none !important; }
+
+/* Hero logo breathe (o halo pulsa sozinho, é um brilho que some/volta) */
+.hero .vctv-logo-new__word            { animation: none !important; }
+
+/* Welcome icon da VCai (estava pulsando com breathe) — manter breathe do mascote
+   no header, mas o welcome icon fica estático */
+.vcai-welcome__icon                   { animation: none !important; }
+
+/* Gallery shuffle do intro — não é bem "passando" mas o conic-gradient
+   roda. Deixar estático. */
+.intro-scene--gallery.is-active .intro-scene__art[data-art="gallery"]::before {
+  animation: none !important;
+  transform: perspective(600px) rotateY(-6deg) rotateX(4deg) !important;
+}
+
+/* ─── Header com Liquid Glass REAL ─────────────────────
+   site-header.glass-panel: tira o backdrop-filter próprio pra não
+   empilhar com o de .glass-effect (senão dá blur dobrado). Tira
+   a background também — o .glass-tint dá o véu translúcido. */
+.site-header.glass-panel {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;  /* header fica colado no topo */
+  overflow: visible !important; /* menu dropdown pode sair */
+  isolation: isolate;
+}
+.site-header.glass-panel > .glass-effect,
+.site-header.glass-panel > .glass-tint,
+.site-header.glass-panel > .glass-shine {
+  border-radius: 0 !important;
+}
+/* Shine só no bottom pra ser elegante (linha de "base" do vidro) */
+.site-header.glass-panel > .glass-shine {
+  box-shadow:
+    inset 0 1px 0 rgba(0, 230, 110, 0.35),
+    inset 0 -1px 0 rgba(160, 80, 240, 0.3);
+}
+
+/* Logo mark no header usa a cor do tema via currentColor */
+.site-header__logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--graphite-white, #efece6);
+  filter: drop-shadow(0 2px 8px rgba(160, 80, 240, 0.25))
+          drop-shadow(0 2px 8px rgba(0, 230, 110, 0.2));
+}
+html[data-theme='light'] .site-header__logo-mark {
+  color: var(--graphite-ink, #2a2528);
+}
+.site-header__logo-img {
+  display: none !important;   /* substituído pelo SVG mark */
+}
+.site-header__logo-text {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  color: var(--graphite-white, #efece6);
+}
+.site-header__logo-text sup {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.5em;
+  margin-left: 2px;
+  opacity: 0.75;
+  letter-spacing: 0.04em;
+}
+html[data-theme='light'] .site-header__logo-text {
+  color: var(--graphite-ink, #2a2528);
+}

@@ -1,0 +1,272 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — liquid-glass-real.css
+   Sistema Liquid Glass fiel à spec do iOS 26 / macOS Tahoe.
+
+   Estrutura das 4 camadas (injetadas via glass.js):
+     <div class="glass-card ...">
+       <span class="glass-effect"></span>   ← blur + distorção SVG
+       <span class="glass-tint"></span>     ← véu translúcido
+       <span class="glass-shine"></span>    ← reflexos verde + roxo
+       [conteúdo real]                      ← z:3
+     </div>
+
+   Carregar POR ÚLTIMO pra sobrescrever todos os sistemas anteriores.
+   =========================================================== */
+
+/* ─── CONTAINER ──────────────────────────────────────── */
+.glass-card,
+.glass-card-strong,
+.glass-card-subtle,
+.glass-panel,
+.glass-pill,
+.glass-circle {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.glass-card,
+.glass-card-strong,
+.glass-card-subtle,
+.glass-panel {
+  border-radius: 24px;
+}
+
+.glass-pill {
+  border-radius: 999px;
+}
+
+.glass-circle {
+  border-radius: 50%;
+}
+
+/* Conteúdo real sempre acima das camadas de vidro */
+.glass-card > *:not(.glass-effect):not(.glass-tint):not(.glass-shine):not(.lg-layers):not(.lg-sweep):not(.lg-grain),
+.glass-card-strong > *:not(.glass-effect):not(.glass-tint):not(.glass-shine):not(.lg-layers):not(.lg-sweep):not(.lg-grain),
+.glass-card-subtle > *:not(.glass-effect):not(.glass-tint):not(.glass-shine):not(.lg-layers):not(.lg-sweep):not(.lg-grain),
+.glass-panel > *:not(.glass-effect):not(.glass-tint):not(.glass-shine):not(.lg-layers):not(.lg-sweep):not(.lg-grain),
+.glass-pill > *:not(.glass-effect):not(.glass-tint):not(.glass-shine),
+.glass-circle > *:not(.glass-effect):not(.glass-tint):not(.glass-shine) {
+  position: relative;
+  z-index: 3;
+}
+
+/* ─── CAMADA 1 · EFFECT (blur + displacement SVG) ────── */
+.glass-effect {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+          backdrop-filter: blur(18px) saturate(180%);
+
+  /* Chromium aplica o filter SVG em cima do backdrop-filter →
+     distorção óptica real. Safari/Firefox ignoram filter:url() em
+     elementos transparentes e ficam só com o blur — fallback OK. */
+  filter: url(#liquid-glass-distort);
+}
+
+.glass-card-strong > .glass-effect {
+  -webkit-backdrop-filter: blur(28px) saturate(220%);
+          backdrop-filter: blur(28px) saturate(220%);
+  filter: url(#liquid-glass-distort-strong);
+}
+
+.glass-card-subtle > .glass-effect,
+.glass-pill > .glass-effect,
+.glass-circle > .glass-effect {
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+          backdrop-filter: blur(14px) saturate(160%);
+  filter: url(#liquid-glass-distort-subtle);
+}
+
+/* ─── CAMADA 2 · TINT (véu translúcido) ──────────────── */
+.glass-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.glass-card-strong > .glass-tint {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme='light'] .glass-tint {
+  background: rgba(255, 255, 255, 0.55);
+}
+html[data-theme='light'] .glass-card-strong > .glass-tint {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* ─── CAMADA 3 · SHINE (reflexos verde + roxo sutis) ─── */
+/* Per spec do usuário: verde na luz (top/left), roxo na sombra
+   (bottom/right). Alpha BAIXO pra parecer refração de luz. */
+.glass-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 1px 1px 0 rgba(0, 230, 110, 0.45),
+    inset -1px -1px 0 rgba(160, 80, 240, 0.35),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+}
+
+.glass-card-strong > .glass-shine {
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(0, 230, 110, 0.55),
+    inset -1.5px -1.5px 0 rgba(160, 80, 240, 0.45),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme='light'] .glass-shine {
+  box-shadow:
+    inset 1px 1px 0 rgba(0, 230, 110, 0.3),
+    inset -1px -1px 0 rgba(160, 80, 240, 0.25),
+    inset 0 0 0 0.5px rgba(90, 70, 110, 0.1);
+}
+html[data-theme='light'] .glass-card-strong > .glass-shine {
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(0, 230, 110, 0.4),
+    inset -1.5px -1.5px 0 rgba(160, 80, 240, 0.35),
+    inset 0 0 0 0.5px rgba(90, 70, 110, 0.14);
+}
+
+/* ─── SOMBRAS EXTERNAS (flutuação) ───────────────────── */
+/* O vidro flutua sobre o conteúdo — sombras dão profundidade. */
+.glass-card,
+.glass-panel {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.2),
+    0 20px 40px -12px rgba(5, 3, 9, 0.55),
+    0 24px 60px -18px rgba(160, 80, 240, 0.2);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card-strong {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.14),
+    0 10px 22px rgba(0, 0, 0, 0.26),
+    0 36px 72px -18px rgba(5, 3, 9, 0.72),
+    0 40px 90px -24px rgba(160, 80, 240, 0.32);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+}
+
+.glass-card-subtle {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.14);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+}
+
+.glass-pill {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    0 6px 14px rgba(0, 0, 0, 0.18),
+    0 10px 22px -10px rgba(160, 80, 240, 0.2);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+}
+
+.glass-circle {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 6px 16px rgba(0, 0, 0, 0.2),
+    0 10px 26px -8px rgba(160, 80, 240, 0.22);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+}
+
+html[data-theme='light'] .glass-card,
+html[data-theme='light'] .glass-panel {
+  border-color: rgba(90, 70, 110, 0.1);
+  box-shadow:
+    0 1px 2px rgba(60, 40, 90, 0.08),
+    0 6px 14px rgba(60, 40, 90, 0.12),
+    0 20px 40px -14px rgba(60, 40, 90, 0.22),
+    0 24px 60px -18px rgba(160, 80, 240, 0.16);
+}
+html[data-theme='light'] .glass-card-strong {
+  border-color: rgba(90, 70, 110, 0.14);
+  box-shadow:
+    0 2px 4px rgba(60, 40, 90, 0.12),
+    0 10px 22px rgba(60, 40, 90, 0.16),
+    0 36px 72px -18px rgba(60, 40, 90, 0.3),
+    0 40px 90px -24px rgba(160, 80, 240, 0.22);
+}
+html[data-theme='light'] .glass-pill,
+html[data-theme='light'] .glass-circle {
+  border-color: rgba(90, 70, 110, 0.12);
+}
+
+/* ─── HOVER (sutil lift, sem brilho passando) ────────── */
+.glass-card:hover,
+.glass-panel:hover {
+  transform: translateY(-3px);
+}
+.glass-card-strong:hover {
+  transform: translateY(-4px);
+}
+.glass-pill:hover {
+  transform: translateY(-1.5px);
+}
+.glass-circle:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* ─── KILL SWITCH: sem brilhos passando ───────────────
+   Desliga os velhos ::before/::after animados que criavam sweeps
+   e os hover-sweeps da versão anterior.                  */
+
+/* Antigas camadas lg-* escondidas */
+.glass-card .lg-layers,
+.glass-card .lg-sweep,
+.glass-card .lg-grain,
+.glass-card-strong .lg-layers,
+.glass-card-strong .lg-sweep,
+.glass-card-strong .lg-grain,
+.glass-panel .lg-layers,
+.glass-panel .lg-sweep,
+.glass-panel .lg-grain {
+  display: none !important;
+}
+
+/* Tira o hue-rotate da borda conic-gradient */
+.glass-card-strong::before {
+  animation: none !important;
+}
+
+/* Tira o sweep que estava no ::before/::after de qualquer versão */
+.glass-card::after,
+.glass-card-strong::after,
+.glass-card-subtle::after,
+.glass-panel::after {
+  display: none !important;
+}
+.glass-card::before,
+.glass-card-strong::before,
+.glass-card-subtle::before,
+.glass-panel::before {
+  display: none !important;
+}
+
+/* ─── MEDIA: reduced motion ───────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .glass-card, .glass-card-strong, .glass-panel,
+  .glass-pill, .glass-circle {
+    transition: none;
+  }
+}
