@@ -9,7 +9,8 @@
   'use strict';
 
   const U = window.VCTV_UTILS;
-  const REACTIVE_SELECTOR = '.glass-card, .glass-card-strong, .glass-pill-strong, .glass-panel';
+  const REACTIVE_SELECTOR =
+    '.glass-card, .glass-card-strong, .glass-card-subtle, .glass-panel, .glass-pill, .glass-pill-strong, .glass-circle';
   const MAX_TILT = 4; /* graus */
 
   function handlePointerMove(e) {
@@ -39,27 +40,34 @@
     }
   }
 
+  const GLASS_LAYER_SELECTOR =
+    '.glass-card, .glass-card-strong, .glass-card-subtle, .glass-panel, .glass-pill, .glass-circle';
+
   function injectLayers(el) {
-    /* Só pra cards grandes — pills/circles não precisam dessas camadas */
-    if (!el.matches('.glass-card, .glass-card-strong, .glass-panel')) return;
-    if (el.querySelector(':scope > .lg-layers')) return;
+    if (!el.matches(GLASS_LAYER_SELECTOR)) return;
+    if (el.querySelector(':scope > .glass-effect')) return;
 
-    const layers = document.createElement('span');
-    layers.className = 'lg-layers';
-    layers.setAttribute('aria-hidden', 'true');
+    /* Remove camadas da versão anterior (lg-*), se tiver */
+    el.querySelectorAll(':scope > .lg-layers, :scope > .lg-sweep, :scope > .lg-grain')
+      .forEach((n) => n.remove());
 
-    const sweep = document.createElement('span');
-    sweep.className = 'lg-sweep';
-    sweep.setAttribute('aria-hidden', 'true');
+    const effect = document.createElement('span');
+    effect.className = 'glass-effect';
+    effect.setAttribute('aria-hidden', 'true');
 
-    const grain = document.createElement('span');
-    grain.className = 'lg-grain';
-    grain.setAttribute('aria-hidden', 'true');
+    const tint = document.createElement('span');
+    tint.className = 'glass-tint';
+    tint.setAttribute('aria-hidden', 'true');
 
-    /* prepend pra não atrapalhar ::before/::after nem ordenar acima do conteúdo */
-    el.insertBefore(grain, el.firstChild);
-    el.insertBefore(sweep, el.firstChild);
-    el.insertBefore(layers, el.firstChild);
+    const shine = document.createElement('span');
+    shine.className = 'glass-shine';
+    shine.setAttribute('aria-hidden', 'true');
+
+    /* Ordem de inserção (no DOM, não importa pro z-index mas importa pro
+       visitor de acessibilidade): effect → tint → shine → [conteúdo] */
+    el.insertBefore(shine, el.firstChild);
+    el.insertBefore(tint, el.firstChild);
+    el.insertBefore(effect, el.firstChild);
   }
 
   function bind(el) {

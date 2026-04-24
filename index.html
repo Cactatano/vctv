@@ -49,21 +49,35 @@
   <link rel="stylesheet" href="./styles/logo-graphite.css" />
   <link rel="stylesheet" href="./styles/pdf-reader-plus.css" />
   <link rel="stylesheet" href="./styles/vcai-plus.css" />
+  <link rel="stylesheet" href="./styles/liquid-glass-real.css" />
+  <link rel="stylesheet" href="./styles/animation-kill.css" />
 </head>
 <body>
 
-<!-- SVG filters for Liquid Glass (refração real no backdrop) -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<!-- SVG filters for Liquid Glass — feTurbulence + feGaussianBlur + feDisplacementMap
+     per iOS 26 / Tahoe spec. Distortion scale varia por variante. -->
+<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
   <defs>
-    <filter id="lg-refract" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="turb" />
-      <feGaussianBlur in="turb" stdDeviation="1.4" result="softTurb" />
-      <feDisplacementMap in="SourceGraphic" in2="softTurb" scale="18" xChannelSelector="R" yChannelSelector="G" />
+    <filter id="liquid-glass-distort" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="5" result="turb"/>
+      <feGaussianBlur in="turb" stdDeviation="2" result="softTurb"/>
+      <feDisplacementMap in="SourceGraphic" in2="softTurb" scale="70" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <filter id="lg-refract-strong" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="3" seed="3" result="turb" />
-      <feGaussianBlur in="turb" stdDeviation="1.2" result="softTurb" />
-      <feDisplacementMap in="SourceGraphic" in2="softTurb" scale="34" xChannelSelector="R" yChannelSelector="G" />
+    <filter id="liquid-glass-distort-strong" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="11" result="turb"/>
+      <feGaussianBlur in="turb" stdDeviation="2" result="softTurb"/>
+      <feDisplacementMap in="SourceGraphic" in2="softTurb" scale="80" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="liquid-glass-distort-subtle" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="2" result="turb"/>
+      <feGaussianBlur in="turb" stdDeviation="2" result="softTurb"/>
+      <feDisplacementMap in="SourceGraphic" in2="softTurb" scale="40" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- Antigo (compat com lg-refract nos CSS anteriores, caso algo ainda referencie) -->
+    <filter id="lg-refract" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="7" result="turb"/>
+      <feGaussianBlur in="turb" stdDeviation="2" result="softTurb"/>
+      <feDisplacementMap in="SourceGraphic" in2="softTurb" scale="70" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
 </svg>
@@ -79,12 +93,17 @@
 </div>
 
 <!-- 2. Header -->
-<header id="site-header" class="site-header" role="banner">
+<header id="site-header" class="site-header glass-panel" role="banner">
   <div class="site-header__inner">
     <a class="site-header__logo" href="#top" aria-label="VCtv TM — início">
-      <img src="./logo_rounded.png" alt="" class="site-header__logo-img" aria-hidden="true" />
+      <span class="site-header__logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="30" height="30">
+          <circle cx="16" cy="16" r="14.5" fill="none" stroke="url(#logo-grad)" stroke-width="1.2" opacity="0.9"/>
+          <path d="M9 11 L16 22 L23 11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </span>
       <span class="site-header__logo-text">
-        <span class="gradient-text">VCtv</span><sup>TM</sup>
+        <span>VCtv</span><sup>TM</sup>
       </span>
     </a>
 
@@ -130,13 +149,27 @@
     <div class="hero__inner">
       <div class="hero__badge glass-pill">
         <span class="hero__badge-dot" aria-hidden="true"></span>
-        Nova era · VCtv TM · 2026
+        Nova era da VCtv · desde 2023
       </div>
 
       <h1 id="hero-title" class="hero__title">
         <span class="vctv-logo-new" aria-label="VCtv TM">
-          <span class="vctv-logo-new__word">VCtv</span>
-          <span class="vctv-logo-new__tm">TM</span>
+          <span class="vctv-logo-new__mark" aria-hidden="true">
+            <svg viewBox="0 0 56 56" width="56" height="56">
+              <defs>
+                <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#a050f0"/>
+                  <stop offset="100%" stop-color="#00e66e"/>
+                </linearGradient>
+              </defs>
+              <circle cx="28" cy="28" r="26" fill="none" stroke="url(#logo-grad)" stroke-width="1.5" opacity="0.9"/>
+              <path d="M15 18 L28 40 L41 18" stroke="#efece6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </span>
+          <span class="vctv-logo-new__row">
+            <span class="vctv-logo-new__word">VCtv</span>
+            <span class="vctv-logo-new__tm">TM</span>
+          </span>
           <span class="vctv-logo-new__line" aria-hidden="true"></span>
           <span class="vctv-logo-new__tagline">O jornal feito por você, pra VC.</span>
         </span>
