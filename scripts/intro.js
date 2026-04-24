@@ -198,9 +198,13 @@
       '<div class="intro-noise"></div>';
     rootEl.appendChild(bg);
 
-    /* Logo cantinho */
+    /* Logo cantinho — usa mesmo componente mini do header */
     const logo = U.create('div', { class: 'intro-logo' });
-    logo.innerHTML = '<span class="gradient-text" style="font-family:var(--font-display);font-weight:700;letter-spacing:-.03em;">VCtv<sup>TM</sup></span>';
+    logo.innerHTML =
+      '<span class="vctv-logo-mini" aria-hidden="true">' +
+        '<span class="vctv-logo-mini__word" data-text="VCtv">VCtv</span>' +
+        '<span class="vctv-logo-mini__tm" data-text="TM">TM</span>' +
+      '</span>';
     rootEl.appendChild(logo);
 
     /* Botão pular (sempre visível) */

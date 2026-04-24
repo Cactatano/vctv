@@ -79,38 +79,5 @@
     inset 0 -1px 0 rgba(160, 80, 240, 0.3);
 }
 
-/* Logo mark no header usa a cor do tema via currentColor */
-.site-header__logo-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--graphite-white, #efece6);
-  filter: drop-shadow(0 2px 8px rgba(160, 80, 240, 0.25))
-          drop-shadow(0 2px 8px rgba(0, 230, 110, 0.2));
-}
-html[data-theme='light'] .site-header__logo-mark {
-  color: var(--graphite-ink, #2a2528);
-}
-.site-header__logo-img {
-  display: none !important;   /* substituído pelo SVG mark */
-}
-.site-header__logo-text {
-  font-family: 'Fraunces', serif;
-  font-weight: 800;
-  font-style: italic;
-  font-size: 1.25rem;
-  letter-spacing: -0.03em;
-  color: var(--graphite-white, #efece6);
-}
-.site-header__logo-text sup {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 0.5em;
-  margin-left: 2px;
-  opacity: 0.75;
-  letter-spacing: 0.04em;
-}
-html[data-theme='light'] .site-header__logo-text {
-  color: var(--graphite-ink, #2a2528);
-}
+/* site-header__logo-img removido do HTML — esconde se sobrar em cache */
+.site-header__logo-img { display: none !important; }

@@ -202,15 +202,19 @@ body.intro-active { overflow: hidden; }
 }
 .intro-scene__art[data-art="boot"]::before {
   content: 'VCtv TM';
-  font-family: 'Fraunces', serif;
-  font-weight: 900;
-  font-size: 2rem;
-  letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #a050f0 0%, #00e66e 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 18px rgba(160,80,240,0.4));
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 2.4rem;
+  letter-spacing: -0.005em;
+  color: #efece6;
+  text-shadow:
+    -2px 0 0 rgba(160, 80, 240, 0.3),
+    -4px 0 10px rgba(160, 80, 240, 0.8),
+    -8px 0 22px rgba(160, 80, 240, 0.5),
+    2px 0 0 rgba(0, 230, 110, 0.3),
+    4px 0 10px rgba(0, 230, 110, 0.8),
+    8px 0 22px rgba(0, 230, 110, 0.5),
+    0 0 24px rgba(239, 236, 230, 0.25);
 }
 .intro-scene__art[data-art="boot"]::after {
   content: '';

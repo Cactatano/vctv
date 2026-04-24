@@ -15,94 +15,148 @@
 }
 
 /* ─── LOGO NOVA (hero + header + intro) ─────────────────── */
+/* ─── LOGO NOVA (estilo "neon grainy") ─────────────────
+   Letras brancas com textura granulada, halo roxo à ESQUERDA e
+   halo verde à DIREITA. TM empilhado embaixo. Linha gradient curta.
+   Tagline em branco puro sans-serif.
+   ==================================================== */
+
 .vctv-logo-new {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  font-family: 'Fraunces', serif;
+  gap: 2px;
+  font-family: 'Fredoka', 'Nunito', 'Plus Jakarta Sans', sans-serif;
   position: relative;
   isolation: isolate;
-  padding: 4px 0;
-}
-
-/* Mark circular com "V" (monograma) acima do wordmark */
-.vctv-logo-new__mark {
-  width: 56px;
-  height: 56px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2px;
-  filter: drop-shadow(0 4px 16px rgba(160, 80, 240, 0.25))
-          drop-shadow(0 4px 16px rgba(0, 230, 110, 0.2));
-}
-
-.vctv-logo-new__row {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0;
-}
-
-.vctv-logo-new__word {
-  font-size: clamp(2.6rem, 8.5vw, 5.2rem);
-  font-weight: 900;
-  font-style: italic;
+  padding: 8px 20px;
   line-height: 0.9;
-  letter-spacing: -0.045em;
+}
+
+/* Word "VCtv" — grande, branco grafite, com halo duplo roxo/verde */
+.vctv-logo-new__word {
+  font-size: clamp(3.2rem, 11vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
   color: var(--graphite-white);
   position: relative;
+  display: inline-block;
+
+  /* Glow assimétrico: ROXO à esquerda + VERDE à direita */
+  text-shadow:
+    /* purple glow — esquerda */
+    -3px 0 0 rgba(160, 80, 240, 0.35),
+    -6px 0 14px rgba(160, 80, 240, 0.85),
+    -10px 0 28px rgba(160, 80, 240, 0.6),
+    -16px 0 50px rgba(160, 80, 240, 0.35),
+    /* green glow — direita */
+    3px 0 0 rgba(0, 230, 110, 0.35),
+    6px 0 14px rgba(0, 230, 110, 0.85),
+    10px 0 28px rgba(0, 230, 110, 0.6),
+    16px 0 50px rgba(0, 230, 110, 0.35),
+    /* inner soft white */
+    0 0 30px rgba(239, 236, 230, 0.2);
 }
 
+/* Grain texture sobreposto nas letras — usa ::before com noise.svg
+   clipado ao texto via background-clip: text */
+.vctv-logo-new__word::before,
+.vctv-logo-new__tm::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background-image: url('../assets/noise.svg'), linear-gradient(#efece6, #efece6);
+  background-size: 140px 140px, auto;
+  background-blend-mode: overlay, normal;
+  -webkit-background-clip: text;
+          background-clip: text;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: 0.45;
+  z-index: 2;
+}
+
+/* TM empilhado embaixo, MESMO estilo (só menor) */
 .vctv-logo-new__tm {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-style: normal;
+  font-size: clamp(1.1rem, 3.2vw, 1.8rem);
   font-weight: 700;
-  font-size: clamp(0.65rem, 1.5vw, 0.9rem);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--graphite-white);
-  opacity: 0.8;
-  margin-left: 4px;
-  align-self: flex-start;
-  margin-top: 0.4em;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--graphite-white) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--graphite-white) 18%, transparent);
+  position: relative;
+  display: inline-block;
+  margin-top: -0.05em;
+
+  text-shadow:
+    -2px 0 0 rgba(160, 80, 240, 0.3),
+    -4px 0 10px rgba(160, 80, 240, 0.8),
+    -7px 0 22px rgba(160, 80, 240, 0.5),
+    2px 0 0 rgba(0, 230, 110, 0.3),
+    4px 0 10px rgba(0, 230, 110, 0.8),
+    7px 0 22px rgba(0, 230, 110, 0.5),
+    0 0 20px rgba(239, 236, 230, 0.2);
 }
 
+/* Linha gradient curta abaixo do TM */
 .vctv-logo-new__line {
-  width: 52px;
-  height: 1.5px;
-  margin-top: 4px;
+  width: 160px;
+  max-width: 50%;
+  height: 2px;
+  margin-top: 12px;
   border-radius: 999px;
   background: linear-gradient(90deg,
-    rgba(160, 80, 240, 0.85) 0%,
-    rgba(239, 236, 230, 0.6) 50%,
-    rgba(0, 230, 110, 0.85) 100%);
+    transparent 0%,
+    rgba(160, 80, 240, 0.9) 25%,
+    rgba(239, 236, 230, 0.85) 50%,
+    rgba(0, 230, 110, 0.9) 75%,
+    transparent 100%);
+  filter: blur(0.3px);
 }
 
+/* Tagline — branco puro sans-serif, limpa */
 .vctv-logo-new__tagline {
-  margin-top: 2px;
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
-  color: color-mix(in srgb, var(--graphite-white) 85%, transparent);
+  margin-top: 14px;
+  font-family: 'Plus Jakarta Sans', 'Nunito', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(0.95rem, 2vw, 1.3rem);
   letter-spacing: 0.005em;
+  color: var(--graphite-white);
+  text-shadow:
+    0 0 14px rgba(239, 236, 230, 0.3),
+    0 0 30px rgba(239, 236, 230, 0.15);
 }
 
+/* Tema claro: inverte halos pra serem mais sutis */
 html[data-theme='light'] .vctv-logo-new__word,
 html[data-theme='light'] .vctv-logo-new__tm,
 html[data-theme='light'] .vctv-logo-new__tagline {
   color: var(--graphite-ink);
 }
-html[data-theme='light'] .vctv-logo-new__tagline {
-  opacity: 0.75;
+html[data-theme='light'] .vctv-logo-new__word {
+  text-shadow:
+    -3px 0 0 rgba(160, 80, 240, 0.2),
+    -6px 0 14px rgba(160, 80, 240, 0.5),
+    -12px 0 30px rgba(160, 80, 240, 0.3),
+    3px 0 0 rgba(0, 230, 110, 0.2),
+    6px 0 14px rgba(0, 230, 110, 0.5),
+    12px 0 30px rgba(0, 230, 110, 0.3);
 }
 html[data-theme='light'] .vctv-logo-new__tm {
-  background: color-mix(in srgb, var(--graphite-ink) 6%, transparent);
-  border-color: color-mix(in srgb, var(--graphite-ink) 18%, transparent);
+  text-shadow:
+    -2px 0 10px rgba(160, 80, 240, 0.4),
+    2px 0 10px rgba(0, 230, 110, 0.4);
+}
+html[data-theme='light'] .vctv-logo-new__tagline {
+  text-shadow: none;
+  opacity: 0.85;
+}
+html[data-theme='light'] .vctv-logo-new__word::before,
+html[data-theme='light'] .vctv-logo-new__tm::before {
+  background-image: url('../assets/noise.svg'), linear-gradient(var(--graphite-ink), var(--graphite-ink));
+  mix-blend-mode: multiply;
+  opacity: 0.35;
 }
 
 /* ─── DETALHES GRAFITE NO SITE ──────────────────────────── */
@@ -242,31 +296,85 @@ html[data-theme='light'] .edition-meta__item {
   border-color: color-mix(in srgb, var(--graphite-white) 22%, rgba(255, 255, 255, 0.12));
 }
 
-/* ─── LOGO "MINI" (pro header) ──────────────────────────── */
+/* ─── LOGO MINI (pro header — mesma identidade compacta) ── */
 .vctv-logo-mini {
   display: inline-flex;
   align-items: baseline;
-  gap: 2px;
-  font-family: 'Fraunces', serif;
-  font-weight: 900;
-  font-size: 1.35rem;
-  letter-spacing: -0.035em;
+  gap: 4px;
+  font-family: 'Fredoka', 'Nunito', 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  padding: 2px 0;
+  position: relative;
+  isolation: isolate;
+}
+.vctv-logo-mini__word {
+  font-size: 1.5rem;
   color: var(--graphite-white);
+  position: relative;
+  display: inline-block;
   text-shadow:
-    -1px 0 8px rgba(160, 80, 240, 0.6),
-     1px 0 8px rgba(0, 230, 110, 0.6);
+    -1.5px 0 0 rgba(160, 80, 240, 0.3),
+    -3px 0 8px rgba(160, 80, 240, 0.75),
+    -5px 0 16px rgba(160, 80, 240, 0.45),
+    1.5px 0 0 rgba(0, 230, 110, 0.3),
+    3px 0 8px rgba(0, 230, 110, 0.75),
+    5px 0 16px rgba(0, 230, 110, 0.45);
 }
-.vctv-logo-mini sup {
-  font-size: 0.5em;
-  margin-left: 2px;
-  opacity: 0.8;
-  letter-spacing: 0;
+.vctv-logo-mini__tm {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--graphite-white);
+  position: relative;
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 0.15em;
+  opacity: 0.92;
+  text-shadow:
+    -1px 0 5px rgba(160, 80, 240, 0.65),
+    1px 0 5px rgba(0, 230, 110, 0.65);
 }
-html[data-theme='light'] .vctv-logo-mini {
+
+/* Grain nas letras mini */
+.vctv-logo-mini__word::before,
+.vctv-logo-mini__tm::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background-image: url('../assets/noise.svg'), linear-gradient(#efece6, #efece6);
+  background-size: 80px 80px, auto;
+  background-blend-mode: overlay, normal;
+  -webkit-background-clip: text;
+          background-clip: text;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+}
+
+html[data-theme='light'] .vctv-logo-mini__word,
+html[data-theme='light'] .vctv-logo-mini__tm {
   color: var(--graphite-ink);
+}
+html[data-theme='light'] .vctv-logo-mini__word {
   text-shadow:
-    -1px 0 6px rgba(160, 80, 240, 0.4),
-     1px 0 6px rgba(0, 230, 110, 0.4);
+    -1.5px 0 0 rgba(160, 80, 240, 0.25),
+    -3px 0 8px rgba(160, 80, 240, 0.5),
+    1.5px 0 0 rgba(0, 230, 110, 0.25),
+    3px 0 8px rgba(0, 230, 110, 0.5);
+}
+html[data-theme='light'] .vctv-logo-mini__tm {
+  text-shadow:
+    -1px 0 5px rgba(160, 80, 240, 0.4),
+    1px 0 5px rgba(0, 230, 110, 0.4);
+}
+html[data-theme='light'] .vctv-logo-mini__word::before,
+html[data-theme='light'] .vctv-logo-mini__tm::before {
+  background-image: url('../assets/noise.svg'), linear-gradient(var(--graphite-ink), var(--graphite-ink));
+  mix-blend-mode: multiply;
+  opacity: 0.3;
 }
 
 /* ─── BRANCO GRAFITE ESPALHADO ─────────────────────────── */
