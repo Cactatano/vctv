@@ -1,0 +1,170 @@
+/* ═══════════════════════════════════════════════════════════════
+   VCtv TM — mobile-fixes.css
+   Corrige uma bateria de regressões de mobile detectadas em
+   auditoria. Carregado por último pra ter precedência sobre
+   regras conflitantes nos CSS anteriores.
+   =========================================================== */
+
+/* ─── 0. Defensivo: nunca scroll horizontal acidental ───── */
+html, body { overflow-x: hidden; }
+
+/* ─── 1. PDF reader: 100vw causa overflow se o overlay
+        tem padding ou se o viewport unit calcula com
+        scrollbar. Trocar pra 100% que é mais seguro. */
+@media (max-width: 680px) {
+  .pdf-reader { width: 100%; }
+}
+
+/* ─── 2. Intro stage em telas <479px: estage gigante
+        força conteúdo a vazar. Apertar e dar respiro. */
+@media (max-width: 479px) {
+  .intro-stage {
+    width: 100%;
+    height: min(580px, 72vh);
+  }
+  .intro-scene__inner {
+    padding: 14px;
+    max-width: 100%;
+  }
+  .intro-scene__art {
+    height: 120px;
+    margin-bottom: 14px;
+  }
+}
+
+/* ─── 3. Search demo input dentro da intro:
+        text muito longo overflow horizontal. */
+@media (max-width: 479px) {
+  .intro-scene__art[data-art="search"]::after {
+    min-width: 0;
+    max-width: calc(100vw - 60px);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    white-space: normal;
+    line-height: 1.3;
+  }
+}
+
+/* ─── 4. VCai panel: em telas <560px, fixar em bottom
+        sheet com margin lateral, sem cortar. */
+@media (max-width: 560px) {
+  .vcai-panel {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: none;
+    bottom: 84px;
+  }
+}
+
+/* ─── 5. Hero logo "VCtv": text-shadow muito amplo em
+        mobile pequeno borra demais. Reduzir camadas. */
+@media (max-width: 500px) {
+  .vctv-logo-new__word {
+    text-shadow:
+      -2px 0 0 rgba(160, 80, 240, 0.32),
+      -4px 0 8px rgba(160, 80, 240, 0.7),
+      -8px 0 18px rgba(160, 80, 240, 0.4),
+      2px 0 0 rgba(0, 230, 110, 0.32),
+      4px 0 8px rgba(0, 230, 110, 0.7),
+      8px 0 18px rgba(0, 230, 110, 0.4);
+  }
+}
+
+/* ─── 6. Header logo mini em telas muito pequenas (<380px):
+        text-shadow grande quebra layout do nav. */
+@media (max-width: 380px) {
+  .vctv-logo-mini__word {
+    font-size: 1.15rem;
+    text-shadow:
+      -1px 0 0 rgba(160, 80, 240, 0.32),
+      -2px 0 4px rgba(160, 80, 240, 0.7),
+      -3px 0 8px rgba(160, 80, 240, 0.4),
+      1px 0 0 rgba(0, 230, 110, 0.32),
+      2px 0 4px rgba(0, 230, 110, 0.7),
+      3px 0 8px rgba(0, 230, 110, 0.4);
+  }
+  .vctv-logo-mini__tm {
+    font-size: 0.55rem;
+  }
+}
+
+/* ─── 7. WA banner em mobile pequeno: o link às vezes
+        estoura por white-space ou flex-shrink. */
+@media (max-width: 480px) {
+  .wa-banner {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .wa-banner__link {
+    font-size: 0.78rem;
+    line-height: 1.35;
+    white-space: normal;
+  }
+  .wa-banner__icon { font-size: 0.95rem; }
+}
+
+/* ─── 8. Intro progress dots vs controls em <479:
+        os dots ficam em bottom 60 e controls em bottom 30.
+        Empurrar dots pra cima pra dar respiro do botão "Pular". */
+@media (max-width: 479px) {
+  .intro-progress { bottom: 78px; }
+  .intro-controls { bottom: 24px; }
+  .intro-enter { bottom: 96px; }
+}
+
+/* ─── 9. Surpresa card em mobile: padding mais apertado
+        e botões empilhados (já tem regra no surpresa.css,
+        reforço aqui pra <360 super estreito). */
+@media (max-width: 360px) {
+  .surpresa-card {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+  .surpresa-card__title { font-size: 1.4rem; }
+  .surpresa-card__text { font-size: 0.92rem; }
+}
+
+/* ─── 10. Hero stats grid: em mobile super estreito,
+        3 cards lado a lado fica apertado. Empilhar 1+2. */
+@media (max-width: 380px) {
+  .hero__stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero__stat {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .hero__stat-num { font-size: 1.6rem; }
+  .hero__stat-label { font-size: 0.78rem; }
+}
+
+/* ─── 11. Buttons: em mobile, evitar texto que quebra
+        de forma estranha. min-height pra área de toque. */
+@media (max-width: 480px) {
+  .btn-cta, .btn-ghost, .btn-primary {
+    min-height: 44px; /* WCAG touch target */
+  }
+}
+
+/* ─── 12. Filters chips na seção Edições: chips
+        podem estourar em mobile. Permitir wrap. */
+@media (max-width: 560px) {
+  .filters {
+    gap: 12px;
+  }
+  .filters__chips {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .filters__group--sort .filters__select {
+    width: 100%;
+  }
+}
