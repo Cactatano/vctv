@@ -10,6 +10,8 @@
   const U = window.VCTV_UTILS;
   const HIST_KEY = 'vctv-vcai-history';
   const MAX_HISTORY = 40;
+  const TIMEOUT_MS = 20000;
+  const MAX_RETRIES = 2; // 2 retries → até 3 tentativas no total
 
   const state = {
     open: false,
@@ -17,13 +19,21 @@
     messages: [],
     ctrl: null,
     lastUserText: null,
+    retrying: null, // { attempt, total } durante retry
   };
 
   /* ─── SYSTEM PROMPT ─────────────────────────────────── */
   function buildSystemPrompt() {
-    const catalogSummary = window.VCTV_DATA && window.VCTV_DATA.helpers && window.VCTV_DATA.helpers.catalogSummary
+    let catalogSummary = window.VCTV_DATA && window.VCTV_DATA.helpers && window.VCTV_DATA.helpers.catalogSummary
       ? window.VCTV_DATA.helpers.catalogSummary()
       : '(sem catálogo disponível)';
+
+    /* Safeguard: se passar de 4000 chars (~ muitas edições no futuro),
+       trunca pra não estourar context window do provedor. */
+    if (catalogSummary.length > 4000) {
+      catalogSummary = catalogSummary.slice(0, 4000)
+        + '\n… (e tem mais edições — peça pra eu listar por tema ou data)';
+    }
 
     return (
       'Você é o VCai 2.0, o mascote-assistente do jornal digital VCtv TM. ' +
@@ -53,6 +63,57 @@
   }
 
   /* ─── API ────────────────────────────────────────────── */
+  /* Erro tipado: ajuda a decidir se faz retry e que mensagem mostrar */
+  function makeErr(name, message, extras) {
+    const e = new Error(message);
+    e.name = name;
+    if (extras) Object.assign(e, extras);
+    return e;
+  }
+
+  /* Wrap de fetch com timeout dedicado.  Retorna `Response` ou throw
+     tipado: TimeoutError / AbortError / HTTPError(status) / NetworkError. */
+  async function fetchWithTimeout(url, opts) {
+    let timedOut = false;
+    const timeoutId = setTimeout(() => {
+      timedOut = true;
+      if (state.ctrl) state.ctrl.abort();
+    }, TIMEOUT_MS);
+    try {
+      const res = await fetch(url, opts);
+      clearTimeout(timeoutId);
+      if (!res.ok) {
+        const body = await res.text().catch(() => '');
+        throw makeErr('HTTPError', 'http ' + res.status, { status: res.status, body });
+      }
+      return res;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      if (timedOut) throw makeErr('TimeoutError', 'demorou mais de ' + (TIMEOUT_MS / 1000) + 's');
+      if (err.name === 'AbortError') throw err;
+      if (err.name === 'HTTPError') throw err;
+      throw makeErr('NetworkError', err.message || 'falha de rede');
+    }
+  }
+
+  function parseProviderResponse(text) {
+    let parsed = null;
+    try { parsed = JSON.parse(text); } catch { /* texto puro */ }
+    if (parsed) {
+      if (parsed.error) {
+        throw makeErr('ProviderError',
+          (parsed.error && parsed.error.message) || 'erro do provedor',
+          { providerError: true });
+      }
+      if (parsed.choices && parsed.choices[0] && parsed.choices[0].message) {
+        return parsed.choices[0].message.content;
+      }
+      if (parsed.content) return parsed.content;
+    }
+    if (typeof text === 'string' && text.trim()) return text;
+    throw makeErr('ProviderError', 'resposta vazia do provedor');
+  }
+
   async function callAI(userText) {
     const messages = [
       { role: 'system', content: buildSystemPrompt() },
@@ -63,8 +124,9 @@
     if (state.ctrl) state.ctrl.abort();
     state.ctrl = new AbortController();
 
+    /* Tentativa POST (endpoint /openai) */
     try {
-      const res = await fetch('https://text.pollinations.ai/openai', {
+      const res = await fetchWithTimeout('https://text.pollinations.ai/openai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -75,28 +137,50 @@
         }),
         signal: state.ctrl.signal,
       });
-      if (!res.ok) throw new Error('post failed ' + res.status);
       const text = await res.text();
-      try {
-        const j = JSON.parse(text);
-        if (j.choices && j.choices[0] && j.choices[0].message) {
-          return j.choices[0].message.content;
-        }
-        if (j.content) return j.content;
-      } catch { /* texto puro */ }
-      return text;
+      return parseProviderResponse(text);
     } catch (errPost) {
-      if (errPost.name === 'AbortError') throw errPost;
+      /* Aborts (usuário ou timeout) sobem direto */
+      if (errPost.name === 'AbortError' || errPost.name === 'TimeoutError') throw errPost;
+      /* ProviderError não vai melhorar com fallback GET (mesmo backend) */
+      if (errPost.providerError) throw errPost;
+
+      /* Fallback GET (endpoint flat) */
       const flat = messages.map((m) =>
         (m.role === 'system' ? '[Instruções]: ' : m.role === 'user' ? '[Usuário]: ' : '[VCai]: ')
         + m.content
       ).join('\n\n') + '\n\n[VCai]:';
       const url = 'https://text.pollinations.ai/' + encodeURIComponent(flat)
         + '?model=openai&private=true';
-      const res2 = await fetch(url, { signal: state.ctrl.signal });
-      if (!res2.ok) throw new Error('get failed ' + res2.status);
-      return await res2.text();
+      const res2 = await fetchWithTimeout(url, { signal: state.ctrl.signal });
+      return parseProviderResponse(await res2.text());
     }
+  }
+
+  /* Retry exponencial: 2s, 4s. Máx 3 tentativas no total.
+     Não retry: AbortError (usuário cancelou) e ProviderError (erro semântico). */
+  async function callAIWithRetry(userText) {
+    let lastErr;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        if (attempt > 0) {
+          state.retrying = { attempt: attempt + 1, total: MAX_RETRIES + 1 };
+          renderMessages();
+          await new Promise((r) => setTimeout(r, 2000 * Math.pow(2, attempt - 1)));
+        }
+        const reply = await callAI(userText);
+        state.retrying = null;
+        return reply;
+      } catch (err) {
+        lastErr = err;
+        if (err.name === 'AbortError') throw err;
+        if (err.providerError) throw err;
+        if (err.status && err.status === 401) throw err;
+        if (attempt >= MAX_RETRIES) break;
+      }
+    }
+    state.retrying = null;
+    throw lastErr;
   }
 
   /* ─── UI BUILD ───────────────────────────────────────── */
@@ -377,6 +461,12 @@
         '<span class="vcai-typing__dot"></span>' +
         '<span class="vcai-typing__dot"></span>' +
         '<span class="vcai-typing__dot"></span>';
+      if (state.retrying) {
+        const retryHint = U.create('span', { class: 'vcai-retry-hint' });
+        retryHint.textContent =
+          ' tentando de novo (' + state.retrying.attempt + '/' + state.retrying.total + ')…';
+        bubble.appendChild(retryHint);
+      }
       group.appendChild(bubble);
       host.appendChild(group);
     }
@@ -433,25 +523,34 @@
 
   async function doSend(text) {
     try {
-      const reply = await callAI(text);
-      state.sending = false;
+      const reply = await callAIWithRetry(text);
       addBotMessage(cleanReply(reply));
     } catch (err) {
-      state.sending = false;
+      let content;
+      let isError = true;
       if (err.name === 'AbortError') {
-        state.messages.push({
-          role: 'assistant',
-          content: '_Parado por você._',
-          ts: Date.now(),
-        });
+        content = '_Parado por você._';
+        isError = false;
+      } else if (err.name === 'TimeoutError') {
+        content = 'Demorou demais pra responder. A internet pode tá lenta — tenta de novo? ⏱️';
+      } else if (err.status === 429 || (err.message && err.message.indexOf('429') >= 0)) {
+        content = 'Tá com muita gente perguntando agora. Espera uns segundinhos e manda de novo. 😅';
+      } else if (err.providerError) {
+        content = 'O provedor de IA reclamou: ' + (err.message || 'erro desconhecido') + '. Tenta reformular? 🤔';
+      } else if (err.name === 'NetworkError' || (err.status && err.status >= 500)) {
+        content = 'Conexão deu chabu. Já tentei algumas vezes — vamos tentar de novo? 📡';
       } else {
-        state.messages.push({
-          role: 'assistant',
-          content: 'Ops, deu ruim com a conexão. Tenta de novo? 😅',
-          ts: Date.now(),
-          error: true,
-        });
+        content = 'Ops, deu ruim. Tenta de novo? 💜';
       }
+      state.messages.push({
+        role: 'assistant',
+        content,
+        ts: Date.now(),
+        error: isError,
+      });
+    } finally {
+      state.sending = false;
+      state.retrying = null;
       saveHistory();
       renderMessages();
     }
@@ -484,6 +583,7 @@
     if (state.sending && state.ctrl) {
       state.ctrl.abort();
       state.sending = false;
+      state.retrying = null;
     }
   }
 
