@@ -133,6 +133,30 @@
     });
   }
 
+  /* ─── SHARE CHANNEL (Surpresa dos 50) ────────────────── */
+  function bindShareChannel() {
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-action="share-channel"]');
+      if (!btn) return;
+      const link = (window.VCTV_DATA && window.VCTV_DATA.META && window.VCTV_DATA.META.canal)
+        || 'https://whatsapp.com/channel/0029VbCaofNGk1FuHSPhca17';
+      const text = 'Bora chegar nos 50 seguidores no canal da VCtv 💜💚';
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: 'VCtv TM no WhatsApp', text, url: link });
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(link);
+          U.toast.success('Link copiado!', 'Cola aí no zap pra ajudar 💜💚');
+        } else {
+          window.open(link, '_blank');
+        }
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        window.open(link, '_blank');
+      }
+    });
+  }
+
   /* ─── REVEAL OBSERVER GLOBAL ─────────────────────────── */
   function bindReveals() {
     const obs = U.createRevealObserver();
@@ -182,6 +206,7 @@
     bindCommentForm();
     bindNotifBell();
     bindReplayIntro();
+    bindShareChannel();
     bindReveals();
 
     /* Evento "boot finished" */

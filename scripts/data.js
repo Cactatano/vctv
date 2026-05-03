@@ -37,6 +37,23 @@ window.VCTV_DATA.EQUIPE = [
 /* ─── EDIÇÕES ────────────────────────────────────────────── */
 window.VCTV_DATA.EDICOES = [
   {
+    id: 'edicao6-02maio2026',
+    numero: 6,
+    tipo: 'semana',
+    categoria: 'Edição da Semana',
+    icone: '📰',
+    titulo: 'VCtv News — Edição 6 (Fim de Semana)',
+    data: '2026-05-02',
+    dataExibicao: '2 de maio de 2026',
+    paginas: 7,
+    criador: 'Jaron',
+    temas: ['internacional', 'brasil', 'são-leopoldo', 'segurança', 'economia', 'clima'],
+    resumo: 'Furtos de carros caem 83,5% em São Leopoldo. Banco Central corta a Selic pra 14,50%. Acordo UE–Mercosul começa a ser implementado. Voos diretos EUA–Venezuela voltam após 7 anos. INMET emite alerta de tempestade pro fim de semana.',
+    arquivo: 'VCtv_Edicao6_02Maio.pdf',
+    corTema: '#00e66e',
+    destaque: true,
+  },
+  {
     id: 'mini-6g-15abr2026',
     numero: null,
     tipo: 'mini',
@@ -51,7 +68,6 @@ window.VCTV_DATA.EDICOES = [
     resumo: 'ITU define IMT-2030 como padrão do 6G, com requisitos técnicos aprovados em março de 2026. 3GPP padroniza especificações globais. IA/ML integrada à rede. FCC debate segurança e espectro. Lançamento comercial previsto para 2030+.',
     arquivo: 'VCtv_Mini_6G.pdf',
     corTema: '#a050f0',
-    destaque: true,
   },
   {
     id: 'especial-artemis2-completo-14abr2026',
