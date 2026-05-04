@@ -582,13 +582,28 @@
       await renderPage();
     } catch (err) {
       if (loading) {
+        const isMissing = err && (
+          err.name === 'MissingPDFException' ||
+          err.name === 'UnexpectedResponseException' ||
+          (err.message && /404|missing|not.*found/i.test(err.message))
+        );
+        const icon = isMissing ? '⏳' : '📄';
+        const title = isMissing ? 'PDF chegando em breve!' : 'Não deu pra abrir por aqui';
+        const text = isMissing
+          ? 'Essa edição ainda tá sendo finalizada. Volta daqui a pouco — vai estar pronta! 💜💚'
+          : 'Pode ser que o leitor embutido não tenha rolado. Tenta abrir direto no navegador.';
+        const btn = isMissing
+          ? '<button class="btn-primary has-ripple" type="button" data-action="close-pdf-reader">Voltar pro site</button>'
+          : '<a class="btn-primary has-ripple" href="' + U.escape(pdfUrl) + '" target="_blank" rel="noopener">Abrir PDF →</a>';
         loading.innerHTML =
           '<div class="glass-card-subtle" style="padding:28px;text-align:center;max-width:440px;">' +
-            '<div style="font-size:3rem;">📄</div>' +
-            '<h3 style="margin:12px 0 6px;font-family:Fraunces,serif;">Não deu pra abrir por aqui</h3>' +
-            '<p style="color:var(--text-muted);margin:0 0 16px;">Clique abaixo pra abrir direto no navegador.</p>' +
-            '<a class="btn-primary has-ripple" href="' + U.escape(pdfUrl) + '" target="_blank" rel="noopener">Abrir PDF →</a>' +
+            '<div style="font-size:3rem;">' + icon + '</div>' +
+            '<h3 style="margin:12px 0 6px;font-family:Fraunces,serif;">' + title + '</h3>' +
+            '<p style="color:var(--text-muted);margin:0 0 16px;">' + text + '</p>' +
+            btn +
           '</div>';
+        const closeBtn = loading.querySelector('[data-action="close-pdf-reader"]');
+        if (closeBtn) closeBtn.addEventListener('click', close);
       }
     }
 
